@@ -9,13 +9,31 @@
 #include<cmath>
 #include<sstream>
 #include<string>
+#include<tuple>
 
 double mean(double* data,int data_points);
 double standard_deviation(double* data, int data_points, double mean);
+std::tuple <double*, int> file_processing();
 
 int main()
 {
-  // Read data from file, ignoring any additional bad data
+  int count{};
+  double* data = NULL;
+  std::string units = "10^-19 Coulomb";
+  std::tie(data,count) = file_processing();
+  double data_mean = mean(data,count);
+  double data_standard_deviation = standard_deviation(data,count,data_mean);
+  double data_standard_error = data_standard_deviation/sqrt(count);
+  std::cout << "Mean: " << data_mean << std::endl;
+  std::cout << "Standard Deviation: " << data_standard_deviation << std::endl;
+  std::cout << "Standard Error in the Mean: " << data_standard_error << std::endl;
+  std::cout << "All in units of " << units << std::endl;
+  delete[] data;
+  return 0;
+}
+
+std::tuple <double*, int> file_processing(){
+    // Read data from file, ignoring any additional bad data
   int i{1};
   std::string file_name;
   std::ifstream input_file;  // a file stream for reading only
@@ -61,19 +79,9 @@ int main()
       }
       } 
   }
-
   std::cout << file_name << " has " << count << " valid data points and " << (number_of_data_points-count) << " error/errors were detected." << std::endl;
-  std::string units = "x10^-19 Coulomb";
-  double data_mean = mean(data,count);
-  std::cout << "Mean: " << data_mean << units << std::endl;
-  double data_standard_deviation = standard_deviation(data,count,data_mean);
-  std::cout << "Standard Deviation: " << data_standard_deviation << units << std::endl;
-  double data_standard_error = data_standard_deviation/sqrt(count);
-  std::cout << "Standard Error in the Mean: " << data_standard_error << units << std::endl;
-
-  delete[] data;
-  file.close();
-  return 0;
+  std::tuple <double*, int> values = std::make_tuple(data, count);
+  return values;
 }
 
 double mean(double* data,int data_points){
@@ -94,3 +102,4 @@ double standard_deviation(double* data, int data_points, double mean){
   double standard_deviation = sqrt(sum/(data_points-1));
   return standard_deviation;
 }
+
