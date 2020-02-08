@@ -43,7 +43,7 @@ int main()
   double data_standard_deviation = standard_deviation(data,count,data_mean);
   double data_standard_error = data_standard_deviation/sqrt(count);
 
-  //Outputs the data to the user
+  //Outputs the results to the user
   std::cout << std::fixed << std::setprecision(5) << "Mean: " << data_mean << std::endl;
   std::cout << std::fixed << std::setprecision(5) << "Standard Deviation: " << data_standard_deviation << std::endl;
   std::cout << std::fixed << std::setprecision(5) << "Standard Error in the Mean: " << data_standard_error << std::endl;
