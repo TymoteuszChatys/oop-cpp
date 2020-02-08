@@ -1,8 +1,5 @@
-
 // Assignment 1 - Tymoteusz Chatys - 28th January 2020
-
 // A Program to calculate transition energy using simple Bohr formula
-
 #include<iostream>
 #include<iomanip>
 #include<cmath> 
