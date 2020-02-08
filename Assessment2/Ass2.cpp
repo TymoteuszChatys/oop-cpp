@@ -68,7 +68,7 @@ std::tuple <double*, int> file_processing(std::string file_name)
     std::string a_line;
     getline(file, a_line);
     if (a_line.length() > 0) { //If a line has some characters, count it as a data point
-      number_of_data_points = number_of_data_points +1;
+      ++number_of_data_points;
       }
   }
   double* data = NULL;
@@ -85,7 +85,7 @@ std::tuple <double*, int> file_processing(std::string file_name)
     double value_entered;
     if (iss >> value_entered) { //If string can be converted into a double (omitting all whitespace)
       data[count] = value_entered; 
-      count = count + 1;  //Count number of valid data (those that converted to double)
+      ++count;  //Count number of valid data (those that converted to double)
       } 
   }
   std::cout << file_name << " has " << count << " valid data points and " << (number_of_data_points-count) << " error/errors were detected." << std::endl;
