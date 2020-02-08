@@ -44,9 +44,9 @@ int main()
   double data_standard_error = data_standard_deviation/sqrt(count);
 
   //Outputs the data to the user
-  std::cout << "Mean: " << data_mean << std::endl;
-  std::cout << "Standard Deviation: " << data_standard_deviation << std::endl;
-  std::cout << "Standard Error in the Mean: " << data_standard_error << std::endl;
+  std::cout << std::fixed << std::setprecision(5) << "Mean: " << data_mean << std::endl;
+  std::cout << std::fixed << std::setprecision(5) << "Standard Deviation: " << data_standard_deviation << std::endl;
+  std::cout << std::fixed << std::setprecision(5) << "Standard Error in the Mean: " << data_standard_error << std::endl;
   std::cout << "All in units of " << units << std::endl;
   std::cout << " " << std::endl << " " << std::endl << "Input anything to exit " << std::endl; 
   std::cin.ignore();  
