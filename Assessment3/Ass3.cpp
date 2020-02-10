@@ -11,12 +11,13 @@
 #include <vector>
 #include <iterator>
 #include <tuple>
+#include <numeric>
 
 std::string options();
 std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file();
 std::tuple <double*, int> file_processing(std::string file_name);
 int manual();
-bool checkforint();
+bool is_number(const std::string& s);
 
 //Main function of the program
 int main(void)
@@ -37,6 +38,9 @@ int main(void)
         //course_code, course_name = manual();
     }    
     //    } while(not_finished);
+
+
+
 
     // Print out full list of courses
     std::cout << "List of courses:"<<std::endl;
@@ -112,10 +116,15 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
             std::string total_second_line_element;
             for(int n{1}; n < (line_element.size()) ;n++){
                 total_second_line_element = total_second_line_element + " " + line_element[n];
-
             }
-            course_code.push_back(line_element[0]);
-            course_name.push_back(total_second_line_element);
+            if(is_number(line_element[0]) == true){
+                course_code.push_back(line_element[0]);
+                course_name.push_back(total_second_line_element);
+            }
+            else{
+                std::cout << "Error: Course number " << i+1 << " in " << file_name << " has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
+            }
+            ++i;
         } 
     }
     file.close();
@@ -130,19 +139,10 @@ int manual(){
     //    }while{}
     return 0;
 }
+//Function to check wether a string is a number
 
-bool checkforint() {
-	//Checks that the user entered a integer
-	if (std::cin.fail()) {
-		std::cout << "An integer must be entered" << std::endl;
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		return false;
-	}
-	else {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		return true;
-	}
-
+bool is_number(const std::string& s)
+{
+    return !s.empty() && std::find_if(s.begin(), 
+        s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
 }
