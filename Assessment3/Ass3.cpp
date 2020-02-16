@@ -120,11 +120,12 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
             if(is_number(line_element[0]) == true){
                 course_code.push_back(line_element[0]);
                 course_name.push_back(total_second_line_element);
+                std::cout << course_code[i] << " " << course_name[i] << std::endl;
+                i++;
             }
             else{
                 std::cout << "Error: Course number " << i+1 << " in " << file_name << " has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
             }
-            ++i;
         } 
     }
     file.close();

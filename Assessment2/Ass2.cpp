@@ -70,6 +70,12 @@ std::tuple <double*, int> file_processing(std::string file_name)
     if (a_line.length() > 0) { //If a line has some characters, count it as a data point
       ++number_of_data_points;
       }
+  }  while (!file.eof()) {
+    std::string a_line;
+    getline(file, a_line);
+    if (a_line.length() > 0) { //If a line has some characters, count it as a data point
+      ++number_of_data_points;
+      }
   }
   double* data = NULL;
   data = new double[number_of_data_points];  //Make an array given the counted number of data points
