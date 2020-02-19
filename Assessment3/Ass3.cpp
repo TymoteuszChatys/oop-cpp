@@ -43,17 +43,20 @@ int main(void)
     for (int i{}; i<course_code.size(); i++){
         pair.push_back(make_pair(course_code[i],course_name[i]));
     }
-    for (int i=0; i<course_code.size(); i++) 
-    { 
-        // "first" and "second" are used to access 
-        // 1st and 2nd element of pair respectively 
-        std::cout << pair[i].first << pair[i].second << std::endl;
+    
+    std::vector<std::string> output_string;
+    std::string  course_string;
+
+    for (int i=0; i<course_code.size(); i++) { 
+        course_string = "PHYS" + pair[i].first + pair[i].second;
+        output_string.push_back(course_string);
     } 
-  
-    return 0;
 
     // Print out full list of courses
     std::cout << "List of courses:"<<std::endl;
+    for (auto iterator = output_string.begin(); iterator != output_string.end(); iterator++) {
+        std::cout << *iterator << std::endl;
+      }
     std::cout << course_name[3] << std::endl;
 
     // Extract courses belonging to a certain year
