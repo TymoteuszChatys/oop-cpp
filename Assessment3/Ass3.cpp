@@ -1,7 +1,5 @@
-
-// Simple code to store courses using vectors and strings
-
- 
+// Assignment 3 - Tymoteusz Chatys - 19th February 2020
+// A Program to manipulate and sort data
 #include <algorithm>
 #include <cmath>
 #include <fstream>
@@ -40,12 +38,6 @@ int main(void)
     else if(choice == "manual"){
         //course_code, course_name = manual();
     }    
-
-    //Pairs the two vectors (course code and corse name) together to allow manipulation later.  
-    std::vector<std::pair<std::string,std::string>> pair;
-    for (int i{}; i<course_code.size(); i++){
-        pair.push_back(make_pair(course_code[i],course_name[i]));
-    }
     
     std::cout << "What courses would you like to display?" << std::endl
     << "(1) all courses as entered" << std::endl
@@ -55,11 +47,27 @@ int main(void)
     
     int option_picked;
     checkInteger(option_picked,1, 4, "Answer value 1-4 : ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
-    if(option_picked == 2){ //Sort by title// by second element of pairs 
-        sort(pair.begin(), pair.end(), sortbysec); 
+    std::vector<std::pair<std::string,std::string>> pair;
+    if(option_picked == 1 || option_picked == 2 || option_picked == 3){ 
+        //Pairs the two vectors (course code and corse name) together to allow manipulation later.  
+        for (int i{}; i<course_code.size(); i++){
+            pair.push_back(make_pair(course_code[i],course_name[i]));
+        }
+        if(option_picked == 2){//Sort by course name
+            sort(pair.begin(), pair.end(), sortbysec); 
+        }
+        else if(option_picked == 3){//Sort by course code
+            sort(pair.begin(), pair.end()); 
+        }
     }
-    else if(option_picked == 3){ //Sort by course code
-        sort(pair.begin(), pair.end()); 
+    else if(option_picked == 4){//Courses for a particular year
+        int year_picked;
+        checkInteger(year_picked,1, 4, "Which year would you like to view? (1-4): ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
+        for (int i=0; i<course_code.size(); i++) {
+            if (course_code[i][0] == year_picked){
+                pair.push_back(make_pair(course_code[i],course_name[i]));
+            }
+        }
     }
 
     //Creates a vector of output strings in the correct format ready for output.
@@ -72,7 +80,7 @@ int main(void)
 
     //Outputs the courses needed using iterators.
     for (auto iterator = output_string.begin(); iterator != output_string.end(); iterator++) {
-            std::cout << *iterator << std::endl;
+        std::cout << *iterator << std::endl;
     }
 }
 
