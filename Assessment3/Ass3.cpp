@@ -18,8 +18,8 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
 std::tuple <double*, int> file_processing(std::string file_name);
 int manual();
 bool is_number(const std::string& s);
+bool sortbysec(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b);
 void checkInteger(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail);
-
 
 //Main function of the program
 int main(void)
@@ -55,7 +55,8 @@ int main(void)
     
     int option_picked;
     checkInteger(option_picked,1, 4, "Answer value 1-4 : ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
-    if(option_picked == 2){ //Sort by title
+    if(option_picked == 2){ //Sort by title// by second element of pairs 
+        sort(pair.begin(), pair.end(), sortbysec); 
     }
     else if(option_picked == 3){ //Sort by course code
         sort(pair.begin(), pair.end()); 
@@ -203,3 +204,9 @@ void checkInteger(int& integer_entered, int min, int max, std::string prompt, st
         break;
     }
 }
+
+// Function to sort a vector of pairs by the second vector
+bool sortbysec(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b) 
+{ 
+    return (a.second < b.second); 
+} 
