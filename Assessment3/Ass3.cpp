@@ -39,8 +39,18 @@ int main(void)
     }    
     //    } while(not_finished);
 
-
-
+    std::vector<std::pair<std::string,std::string>> pair;
+    for (int i{}; i<course_code.size(); i++){
+        pair.push_back(make_pair(course_code[i],course_name[i]));
+    }
+    for (int i=0; i<course_code.size(); i++) 
+    { 
+        // "first" and "second" are used to access 
+        // 1st and 2nd element of pair respectively 
+        std::cout << pair[i].first << pair[i].second << std::endl;
+    } 
+  
+    return 0;
 
     // Print out full list of courses
     std::cout << "List of courses:"<<std::endl;
@@ -120,7 +130,6 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
             if(is_number(line_element[0]) == true){
                 course_code.push_back(line_element[0]);
                 course_name.push_back(total_second_line_element);
-                std::cout << course_code[i] << " " << course_name[i] << std::endl;
                 i++;
             }
             else{
