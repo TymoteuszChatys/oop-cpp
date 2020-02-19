@@ -18,6 +18,8 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
 std::tuple <double*, int> file_processing(std::string file_name);
 int manual();
 bool is_number(const std::string& s);
+void checkInteger(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail);
+
 
 //Main function of the program
 int main(void)
@@ -44,29 +46,35 @@ int main(void)
         pair.push_back(make_pair(course_code[i],course_name[i]));
     }
     
+
+    //Creates a vector of output strings in the correct format ready for output.
+
+    std::cout << "What courses would you like to display?" << std::endl
+    << "(1) all courses as entered" << std::endl
+    << "(2) by title" << std::endl
+    << "(3) by course code" << std::endl
+    << "(4) or would you like to see the courses for a particular year" << std::endl;
+    
+    int option_picked;
+    checkInteger(option_picked,1, 4, "Answer value 1-4 : ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
+    if(option_picked == 2){
+        //Sort by title
+    }
+    else if(option_picked == 3){
+        //Sort by course code
+        sort(pair.begin(), pair.end()); 
+    }
+
     std::vector<std::string> output_string;
     std::string  course_string;
-
     for (int i=0; i<course_code.size(); i++) { 
         course_string = "PHYS" + pair[i].first + pair[i].second;
         output_string.push_back(course_string);
     } 
 
-    // Print out full list of courses
-    std::cout << "List of courses:"<<std::endl;
     for (auto iterator = output_string.begin(); iterator != output_string.end(); iterator++) {
-        std::cout << *iterator << std::endl;
-      }
-    std::cout << course_name[3] << std::endl;
-
-    // Extract courses belonging to a certain year
-    //string yearChoice;
-    //cout<<"Please enter year: ";
-    //cin>>yearChoice;
-    //cout>>"Sort by code or name: ";
-    //cin>>sortOption;
-
-    return 0;
+            std::cout << *iterator << std::endl;
+    }
 }
 
 std::string options(){
@@ -152,10 +160,39 @@ int manual(){
     //    }while{}
     return 0;
 }
-//Function to check wether a string is a number
 
+
+//Function to check wether a string is a number
 bool is_number(const std::string& s)
 {
     return !s.empty() && std::find_if(s.begin(), 
         s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
+}
+
+void checkInteger(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail)
+//Function to check whether the input is an integer. Also checks if the value lies within the limits specified.
+//Adapted from stackoverflow user Jo-Jo
+//checkInteger(variable, min, max, question, failure message when no integer, failure message when out of range )
+{
+    while(1) {
+        std::string str;
+        std::cout << prompt;
+        std::cin >> str;
+        std::istringstream ss(str);
+        int value_entered;
+        ss >> value_entered;
+        if(!ss.eof()) {
+            std::cout << fail << std::endl;
+            ss.clear();
+            continue;
+        } else {
+            ss.clear();
+            integer_entered = value_entered;
+            if(integer_entered > max || integer_entered < min) {
+              std::cout << rangefail << std::endl;
+              continue;
+        }
+        }
+        break;
+    }
 }
