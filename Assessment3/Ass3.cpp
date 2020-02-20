@@ -182,10 +182,9 @@ std::tuple <std::vector<std::string>,std::vector<std::string>> manual()
     bool to_stop{};
     std::cin.ignore(); //Ignore previous input
     do{
-        std::cout << "Enter course or 'n' to stop: ";
+        std::cout << " Enter course or 'n' to stop: " << std::endl;
         std::string a_line;
         getline(std::cin, a_line);
-        std::cout << a_line;
         if (to_lower(a_line) == "n"){
             //If n is entered the loop is exited
             to_stop = true;
@@ -200,7 +199,6 @@ std::tuple <std::vector<std::string>,std::vector<std::string>> manual()
             for(int n{1}; n < (line_element.size()) ;n++){
                 total_second_line_element = total_second_line_element + " " + line_element[n];
             }
-            std::cout << a_line << " " << line_element[0] << " " <<  total_second_line_element << std::endl; 
             //Checks to see if the course code is an integer, if it is, the course is entered
             if(is_number(line_element[0]) == true){
                 course_code.push_back(line_element[0]);
@@ -268,6 +266,5 @@ std::string integer_to_string(int integer)
 
 std::string to_lower(std::string string){
     std::for_each(string.begin(), string.end(), [](char & c){c = ::tolower(c);});
-    std::cout << string;
     return string;
 }
