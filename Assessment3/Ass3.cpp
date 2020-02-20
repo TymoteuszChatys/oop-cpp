@@ -167,7 +167,7 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
                     std::cout << "Error: line number " << line_count+1 << " in " << file_name << " has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
                 }
             }
-            else{
+            else{ //If the string doesn't have more than 1 whitespace seperated input, throw an error
                 std::cout << "Error: line number " << line_count+1 << " in " << file_name  << " is either empty or has an inalid course code and course name structure. " << std::endl;
             }
             line_count++;
@@ -216,6 +216,7 @@ std::tuple <std::vector<std::string>,std::vector<std::string>> manual()
                     std::cout << "Error: Course number has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
                 }    
             } 
+            //If the string doesn't have more than 1 whitespace seperated input, throw an error
             else{
                     std::cout << "Error: Course name and number provided in an invalid format and or input is empty" << std::endl;
             }       
@@ -262,7 +263,6 @@ void check_integer(int& integer_entered, int min, int max, std::string prompt, s
     }
 }
 
-
 bool sort_by_second(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b) 
 { //Function to sort a vector of pairs by the second vector
     return (a.second < b.second); 
@@ -275,7 +275,8 @@ std::string integer_to_string(int integer)
     return temp.str();
 }
 
-std::string to_lower(std::string string){
+std::string to_lower(std::string string)
+{ //Function converts the whole string to lowercase and returns it
     std::for_each(string.begin(), string.end(), [](char & c){c = ::tolower(c);});
     return string;
 }
