@@ -13,9 +13,10 @@
 
 std::string options();
 std::string integer_to_string(int integer);
+std::string to_lower(std::string string);
+std::tuple <std::vector<std::string>,std::vector<std::string>> manual();
 std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file();
 std::tuple <double*, int> file_processing(std::string file_name);
-int manual();
 bool is_number(const std::string& s);
 bool sort_by_second(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b);
 void check_integer(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail);
@@ -37,6 +38,7 @@ int main()
         }
     }
     else if(choice == "manual"){
+        std::tie(course_code, course_name) = manual();
         //course_code, course_name = manual();
     }    
     
@@ -119,7 +121,7 @@ std::string options(){
 }
 
 std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file()
-{
+{//This function extracts the relevant course codes and course names from a file.
     //Defining variables and vectors
     std::vector<std::string> course_code;
     std::vector<std::string> course_name;
@@ -145,7 +147,7 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
             std::string a_line;
             getline(file, a_line);
             std::istringstream iss(a_line);
-            //Seperates the line into many strings
+            //Seperates the line into many strings via whitespaces
             std::vector<std::string> line_element{
                 std::istream_iterator<std::string>{iss},
                 std::istream_iterator<std::string>{}};
@@ -171,12 +173,49 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
     return values;
 }
 
-int manual(){
-    bool not_finished(true);
-    //o{
-    //    std::cout << "Please enter a course name (or x to finish): " << std::endl;
-    //    }while{}
-    return 0;
+std::tuple <std::vector<std::string>,std::vector<std::string>> manual()
+{//This function asks the user to enter the course codes and course name 1 by 1 and then extracts this data into vectors
+    std::cout << "Enter the course code followed by the course name. e.g 10101 Dynamics. " << std::endl;
+    std::vector<std::string> course_code;
+    std::vector<std::string> course_name;
+    int i{};
+    bool to_stop{};
+    std::cin.ignore(); //Ignore previous input
+    do{
+        std::cout << "Enter course or 'n' to stop: ";
+        std::string a_line;
+        getline(std::cin, a_line);
+        std::cout << a_line;
+        if (to_lower(a_line) == "n"){
+            //If n is entered the loop is exited
+            to_stop = true;
+        }
+        else{
+            //Seperates the line into many strings via whitespaces
+            std::istringstream iss(a_line);
+            std::vector<std::string> line_element{
+                std::istream_iterator<std::string>{iss},
+                std::istream_iterator<std::string>{}};
+            std::string total_second_line_element;
+            for(int n{1}; n < (line_element.size()) ;n++){
+                total_second_line_element = total_second_line_element + " " + line_element[n];
+            }
+            std::cout << a_line << " " << line_element[0] << " " <<  total_second_line_element << std::endl; 
+            //Checks to see if the course code is an integer, if it is, the course is entered
+            if(is_number(line_element[0]) == true){
+                course_code.push_back(line_element[0]);
+                course_name.push_back(total_second_line_element);
+                i++;
+            }
+            //Otherwise an error is shown.
+            else{
+                std::cout << "Error: Course number has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
+            }    
+        }
+
+    }while(to_stop == false);
+    std::tuple <std::vector<std::string>,std::vector<std::string>> values = std::make_tuple(course_code, course_name); //Make tuple and then return
+    return values;
 }
 
 bool is_number(const std::string& s)
@@ -225,4 +264,10 @@ std::string integer_to_string(int integer)
     std::ostringstream temp;
     temp << integer;
     return temp.str();
+}
+
+std::string to_lower(std::string string){
+    std::for_each(string.begin(), string.end(), [](char & c){c = ::tolower(c);});
+    std::cout << string;
+    return string;
 }
