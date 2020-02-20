@@ -1,4 +1,4 @@
-// Assignment 3 - Tymoteusz Chatys - 19th February 2020
+// Assignment 3 - Tymoteusz Chatys - 20th February 2020
 // A Program to manipulate and sort data
 #include <algorithm>
 #include <cmath>
@@ -12,15 +12,16 @@
 #include <numeric>
 
 std::string options();
+std::string integer_to_string(int integer);
 std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file();
 std::tuple <double*, int> file_processing(std::string file_name);
 int manual();
 bool is_number(const std::string& s);
-bool sortbysec(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b);
-void checkInteger(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail);
+bool sort_by_second(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b);
+void check_integer(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail);
 
 //Main function of the program
-int main(void)
+int main()
 {
     std::vector<std::string> course_code;
     std::vector<std::string> course_name;
@@ -46,7 +47,7 @@ int main(void)
     << "(4) or would you like to see the courses for a particular year" << std::endl;
     
     int option_picked;
-    checkInteger(option_picked,1, 4, "Answer value 1-4 : ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
+    check_integer(option_picked,1, 4, "Answer value 1-4 : ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
     std::vector<std::pair<std::string,std::string>> pair;
     if(option_picked == 1 || option_picked == 2 || option_picked == 3){ 
         //Pairs the two vectors (course code and corse name) together to allow manipulation later.  
@@ -54,7 +55,7 @@ int main(void)
             pair.push_back(make_pair(course_code[i],course_name[i]));
         }
         if(option_picked == 2){//Sort by course name
-            sort(pair.begin(), pair.end(), sortbysec); 
+            sort(pair.begin(), pair.end(), sort_by_second); 
         }
         else if(option_picked == 3){//Sort by course code
             sort(pair.begin(), pair.end()); 
@@ -62,9 +63,11 @@ int main(void)
     }
     else if(option_picked == 4){//Courses for a particular year
         int year_picked;
-        checkInteger(year_picked,1, 4, "Which year would you like to view? (1-4): ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
-        for (int i=0; i<course_code.size(); i++) {
-            if (course_code[i][0] == year_picked){
+        check_integer(year_picked,1, 4, "Which year would you like to view? (1-4): ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
+        for (int i{}; i<course_code.size(); i++) {
+            std::string year_picked_string = integer_to_string(year_picked);
+            if (course_code[i][0] == year_picked_string[0]){
+                std::cout << course_code[i] << " " << course_name[i] << std::endl;
                 pair.push_back(make_pair(course_code[i],course_name[i]));
             }
         }
@@ -176,8 +179,6 @@ int manual(){
     return 0;
 }
 
-
-
 bool is_number(const std::string& s)
 //Function to check wether a string is a number
 {
@@ -185,7 +186,7 @@ bool is_number(const std::string& s)
         s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
 }
 
-void checkInteger(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail)
+void check_integer(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail)
 //Function to check whether the input is an integer. Also checks if the value lies within the limits specified.
 //Adapted from stackoverflow user Jo-Jo
 //checkInteger(variable, min, max, question, failure message when no integer, failure message when out of range )
@@ -213,8 +214,15 @@ void checkInteger(int& integer_entered, int min, int max, std::string prompt, st
     }
 }
 
-// Function to sort a vector of pairs by the second vector
-bool sortbysec(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b) 
-{ 
+
+bool sort_by_second(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b) 
+{ //Function to sort a vector of pairs by the second vector
     return (a.second < b.second); 
 } 
+
+std::string integer_to_string(int integer)
+{ //Function converts an integer to a string
+    std::ostringstream temp;
+    temp << integer;
+    return temp.str();
+}
