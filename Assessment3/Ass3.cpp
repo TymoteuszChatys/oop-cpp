@@ -16,7 +16,6 @@ std::string integer_to_string(int integer);
 std::string to_lower(std::string string);
 std::tuple <std::vector<std::string>,std::vector<std::string>> manual();
 std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file();
-std::tuple <double*, int> file_processing(std::string file_name);
 bool is_number(const std::string& s);
 bool sort_by_second(const std::pair<std::string,std::string> &a, const std::pair<std::string,std::string> &b);
 void check_integer(int& integer_entered, int min, int max, std::string prompt, std::string fail, std::string rangefail);
