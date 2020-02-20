@@ -67,16 +67,16 @@ int main()
         for (int i{}; i<course_code.size(); i++) {
             std::string year_picked_string = integer_to_string(year_picked);
             if (course_code[i][0] == year_picked_string[0]){
-                std::cout << course_code[i] << " " << course_name[i] << std::endl;
                 pair.push_back(make_pair(course_code[i],course_name[i]));
             }
         }
+        std::cout << "Good morning" << std::endl;
     }
 
     //Creates a vector of output strings in the correct format ready for output.
     std::vector<std::string> output_string;
     std::string  course_string;
-    for (int i=0; i<course_code.size(); i++) { 
+    for (int i=0; i<pair.size(); i++) { 
         course_string = "PHYS" + pair[i].first + pair[i].second;
         output_string.push_back(course_string);
     } 
