@@ -142,7 +142,7 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
         }
     //If it can be accessed input the data from the file to vectors
     else{
-        int i{};
+        int line_count{};
         while (!file.eof()) {
             std::string a_line;
             getline(file, a_line);
@@ -153,19 +153,24 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
                 std::istream_iterator<std::string>{}};
             std::string total_second_line_element;
             //Takes every seperate string after the first string and combines them to form the course name
-            for(int n{1}; n < (line_element.size()) ;n++){
-                total_second_line_element = total_second_line_element + " " + line_element[n];
+            if (line_element.size() > 1){
+                for(int n{1}; n < (line_element.size()) ;n++){
+                    total_second_line_element = total_second_line_element + " " + line_element[n];
+                }
+                //Checks to see if the course code is an integer, if it is, the course is entered
+                if(is_number(line_element[0]) == true){
+                    course_code.push_back(line_element[0]);
+                    course_name.push_back(total_second_line_element);
+                }
+                //Otherwise an error is shown.
+                else{
+                    std::cout << "Error: line number " << line_count+1 << " in " << file_name << " has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
+                }
             }
-            //Checks to see if the course code is an integer, if it is, the course is entered
-            if(is_number(line_element[0]) == true){
-                course_code.push_back(line_element[0]);
-                course_name.push_back(total_second_line_element);
-                i++;
-            }
-            //Otherwise an error is shown.
             else{
-                std::cout << "Error: Course number " << i+1 << " in " << file_name << " has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
+                std::cout << "Error: line number " << line_count+1 << " in " << file_name  << " is either empty or has an inalid course code and course name structure. " << std::endl;
             }
+            line_count++;
         } 
     }
     file.close();
@@ -196,19 +201,25 @@ std::tuple <std::vector<std::string>,std::vector<std::string>> manual()
                 std::istream_iterator<std::string>{iss},
                 std::istream_iterator<std::string>{}};
             std::string total_second_line_element;
-            for(int n{1}; n < (line_element.size()) ;n++){
-                total_second_line_element = total_second_line_element + " " + line_element[n];
-            }
-            //Checks to see if the course code is an integer, if it is, the course is entered
-            if(is_number(line_element[0]) == true){
-                course_code.push_back(line_element[0]);
-                course_name.push_back(total_second_line_element);
-                i++;
-            }
-            //Otherwise an error is shown.
+            if (line_element.size() > 1){
+                for(int n{1}; n < (line_element.size()) ;n++){
+                    total_second_line_element = total_second_line_element + " " + line_element[n];
+                }
+                //Checks to see if the course code is an integer, if it is, the course is entered
+                if(is_number(line_element[0]) == true){
+                    course_code.push_back(line_element[0]);
+                    course_name.push_back(total_second_line_element);
+                    i++;
+                }
+                //Otherwise an error is shown.
+                else{
+                    std::cout << "Error: Course number has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
+                }    
+            } 
             else{
-                std::cout << "Error: Course number has a non-integer course code. " << total_second_line_element << " has been omitted. " << std::endl;
-            }    
+                    std::cout << "Error: Course name and number provided in an invalid format and or input is empty" << std::endl;
+            }       
+            
         }
 
     }while(to_stop == false);
