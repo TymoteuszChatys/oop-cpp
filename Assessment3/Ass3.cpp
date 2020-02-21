@@ -11,6 +11,7 @@
 #include <tuple>
 #include <numeric>
 
+const std::string degree_prefix{ "PHYS" };
 std::string options();
 std::string integer_to_string(int integer);
 std::string to_lower(std::string string);
@@ -52,7 +53,7 @@ int main()
     std::vector<std::pair<std::string,std::string>> pair;
     if(option_picked == 1 || option_picked == 2 || option_picked == 3){ 
         //Pairs the two vectors (course code and corse name) together to allow manipulation later.  
-        for (int i{}; i<course_code.size(); i++){
+        for (size_t i{}; i<course_code.size(); i++){
             pair.push_back(make_pair(course_code[i],course_name[i]));
         }
         if(option_picked == 2){//Sort by course name
@@ -64,21 +65,20 @@ int main()
     }
     else if(option_picked == 4){//Courses for a particular year
         int year_picked;
-        check_integer(year_picked,1, 4, "Which year would you like to view? (1-4): ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
-        for (int i{}; i<course_code.size(); i++) {
+        check_integer(year_picked,1, 9, "Which year would you like to view?: ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
+        for (size_t i{}; i<course_code.size(); i++) {
             std::string year_picked_string = integer_to_string(year_picked);
             if (course_code[i][0] == year_picked_string[0]){
                 pair.push_back(make_pair(course_code[i],course_name[i]));
             }
         }
-        std::cout << "Good morning" << std::endl;
     }
 
     //Creates a vector of output strings in the correct format ready for output.
     std::vector<std::string> output_string;
     std::string  course_string;
-    for (int i=0; i<pair.size(); i++) { 
-        course_string = "PHYS" + pair[i].first + pair[i].second;
+    for (size_t i{}; i < pair.size(); i++) {
+        course_string = degree_prefix + pair[i].first + pair[i].second;
         output_string.push_back(course_string);
     } 
 
@@ -153,7 +153,7 @@ std::tuple <std::vector<std::string>,std::vector<std::string>,std::string> file(
             std::string total_second_line_element;
             //Takes every seperate string after the first string and combines them to form the course name
             if (line_element.size() > 1){
-                for(int n{1}; n < (line_element.size()) ;n++){
+                for(size_t n{1}; n < (line_element.size()) ;n++){
                     total_second_line_element = total_second_line_element + " " + line_element[n];
                 }
                 //Checks to see if the course code is an integer, if it is, the course is entered
@@ -201,7 +201,7 @@ std::tuple <std::vector<std::string>,std::vector<std::string>> manual()
                 std::istream_iterator<std::string>{}};
             std::string total_second_line_element;
             if (line_element.size() > 1){
-                for(int n{1}; n < (line_element.size()) ;n++){
+                for(size_t n{1}; n < (line_element.size()) ;n++){
                     total_second_line_element = total_second_line_element + " " + line_element[n];
                 }
                 //Checks to see if the course code is an integer, if it is, the course is entered
