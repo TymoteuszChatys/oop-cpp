@@ -65,7 +65,7 @@ int main()
     }
     else if(option_picked == 4){//Courses for a particular year
         int year_picked;
-        check_integer(year_picked,1, 9, "Which year would you like to view?: ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 4");
+        check_integer(year_picked,1, 9, "Which year would you like to view?: ", "Invalid input; please make sure you are inputting an integer", "Invalid input; integer must be between 1 and 9");
         for (size_t i{}; i<course_code.size(); i++) {
             std::string year_picked_string = integer_to_string(year_picked);
             if (course_code[i][0] == year_picked_string[0]){
