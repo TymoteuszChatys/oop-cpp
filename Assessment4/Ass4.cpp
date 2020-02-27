@@ -20,19 +20,36 @@ private:
   std::vector<galaxy *> satellites; //Galaxies contain satellites. Vector for those satellites.
 
 public:
-  // Constructors
-  
+  // Default Constructor
+  galaxy() : hubble_type{"Irr"},redshift{},total_mass{},stellar_mass_fraction{} {}
+  // Parameterized Constructor
+  galaxy(std::string galaxy_hubble_type, double galaxy_redshift, double galaxy_total_mass, double galaxy_stellar_mass_fraction)
+        : hubble_type(galaxy_hubble_type), redshift(galaxy_redshift), total_mass(galaxy_total_mass)
+        ,stellar_mass_fraction(galaxy_stellar_mass_fraction) {}
   // Destructor
-
+  ~ galaxy() {}
   // Return stellar mass (M_* = f_* x M_tot)
-  double stellar_mass() { }
+  double stellar_mass() {return (stellar_mass_fraction * total_mass);}
   // Change galaxy's Hubble type
-  void change_type(std::string new_type) { }
+  void change_type(std::string new_type) {hubble_type = new_type;}
   // Prototype for function to print out an object's data
   void print_data();
   // Add satellite galaxy
-
+  void add_satellite(galaxy &satellite); 
 };
+
+void galaxy::print_data(){
+  std::cout << "The hubble type is " << hubble_type << std::endl <<
+  "The redshift is " << redshift << std::endl <<
+  "The total mass is " << total_mass << std::endl <<
+  "The stellar mass fraction is " << stellar_mass_fraction << std::endl <<
+  "The stellar mass is " << stellar_mass() << std::endl;
+}
+
+void galaxy::add_satellite(galaxy &satellite){
+
+
+}
 // Print out an object's data
 
 // End of class and associated member functions
@@ -42,12 +59,13 @@ int main()
 {
 
   // Example using default constructor
-  galaxy g1; 
+  galaxy milky_way; 
+  galaxy andromeda("Sa", 0.002430, 1e11, 0.34);
 
   // Example using parameterised constructor
 
   // print out data
-
+  andromeda.print_data();
   // Get and print out stellar mass
 
   // Change Hubble type from Irr to S0
