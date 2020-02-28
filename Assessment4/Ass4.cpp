@@ -74,22 +74,27 @@ int main()
             << "(Including the change of type): " << std::endl;
   // Change Hubble type from Irr to S0
   ngc_5866.change_type("S0");
-  ngc_5866.change_name("NGC 5866");
+  ngc_5866.change_name("Spindle Galaxy");
   ngc_5866.change_redshift(0.002);
   ngc_5866.change_total_mass(1e12);
   ngc_5866.change_stellar_mass_fraction(0.03);
   ngc_5866.print_data();
   std::cout << "-----------------------------" << std::endl;
-  // NGC 5236 Details
-  galaxy ngc_5236("NGC 5236","Sa", 0.002430, 1e11, 0.34);
-  galaxy M32("M32","E2", 0.004486, 5.4e9, 0.13);
-  galaxy M110("M110","E5", 0.005875, 2e10, 0.11);
-  ngc_5236.add_satellite(M32);
-  ngc_5236.add_satellite(M110);
 
+  galaxy ngc_5236("Southern Pinwheel Galaxy","Sa", 0.002430, 1.3e11, 0.0343);
+  galaxy ngc_4826("Black Eye Galaxy","Sb",0.001361, 2.3e11,0.0412);
+
+  galaxy milky_way("Milky Way Galaxy","Sb",0,0.5e12,0.032);
+  galaxy large_magellanic_cloud("Large Magellanic Cloud","Sb",0,1e11,0.02);
+  galaxy sagittarius_dwarf_spheroidal("Sagittarius Dwarf Spheroidal Galaxy","E0",0,7e9,0.04);
+  milky_way.add_satellite(large_magellanic_cloud);
+  milky_way.add_satellite(sagittarius_dwarf_spheroidal);
 
   galaxies.push_back(&ngc_5236);
+  galaxies.push_back(&ngc_4826);
+  galaxies.push_back(&milky_way);
   galaxies.push_back(&ngc_5866);
+
   std::cout << "All galaxies and satellites print out: " << std::endl;
   int galaxy_number{1};
   for (auto iterator = galaxies.begin(); iterator != galaxies.end(); iterator++) {
@@ -98,6 +103,7 @@ int main()
     (*iterator)->print_data();
     galaxy_number++;
   }
+  std::cout << "-----------------------------" << std::endl;
   std::cout << "Input anything to exit " << std::endl; 
   std::cin.ignore();  
   std::cin.get();
