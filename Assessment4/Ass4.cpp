@@ -25,15 +25,15 @@ public:
   // Return stellar mass (M_* = f_* x M_tot)
   double stellar_mass() {return (stellar_mass_fraction * total_mass);}
   // Functions to change parameters after initialization
-  void change_name(std::string new_name) {name = new_name;};
+  void change_name(std::string new_name) {name = new_name;}
   void change_type(std::string new_type) {hubble_type = new_type;}
   void change_redshift(double new_redshift) {redshift = new_redshift;}
   void change_total_mass(double new_total_mass) {total_mass = new_total_mass;}
   void change_stellar_mass_fraction(double new_stellar_mass_fraction) {stellar_mass_fraction = new_stellar_mass_fraction;}
+  // Add satellite galaxy
+  void add_satellite(galaxy &satellite){satellites.push_back(&satellite);}
   // Prototype for function to print out an object's data
   void print_data();
-  // Add satellite galaxy
-  void add_satellite(galaxy &satellite); 
 };
 
 void galaxy::print_data(){// Print out an object's data
@@ -52,10 +52,6 @@ void galaxy::print_data(){// Print out an object's data
       (*iterator)->print_data();
     } 
   }     
-}
-
-void galaxy::add_satellite(galaxy &satellite){// Adds the satellite to the respective satellites vector
-  satellites.push_back(&satellite);
 }
 
 // Main program
