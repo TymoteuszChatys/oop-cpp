@@ -1,10 +1,3 @@
-// Tymoteusz Grzegorz Chatys
-// Assignment 4
-// Simple demonstration of a C++ class 
-// Hubble types: E[0-7], S0, S[a-c], SB[a-c], Irr
-// Redshift z in range [0,10]
-// Total mass M_tot in range [1e7,1e12] M_sun
-// Stellar mass fraction f_* in range [0,0.05]
 #include<iostream>
 #include<string>
 #include<vector>
@@ -44,7 +37,7 @@ public:
 };
 
 void galaxy::print_data(){// Print out an object's data
-  std::cout << "---Name: " << name << "---" << std::endl;
+  std::cout << "Name: " << name << std::endl;
   std::cout << "The hubble type is " << hubble_type << std::endl <<
   "The redshift is " << redshift << std::endl <<
   "The total mass is " << total_mass << std::endl <<
@@ -52,16 +45,13 @@ void galaxy::print_data(){// Print out an object's data
   "The stellar mass is " << stellar_mass() << std::endl;
 
   if (satellites.size() > 0){
-    std::cout << "    The Galaxy has " << satellites.size() << " satellites." << std::endl;
-    int i{1};
+    std::cout << "---" << name << " has " << satellites.size() << " satellites---" << std::endl;
+    int satellite_number{1};
     for (auto iterator = satellites.begin(); iterator != satellites.end(); iterator++) {
-      std::cout << "Satellite " << i++ << " properties: " << std::endl;
+      std::cout << "Satellite " << satellite_number++ << " properties: " << std::endl;
       (*iterator)->print_data();
     } 
   }     
-  else{
-    std::cout << "---The Galaxy has 0 satellites.---" << std::endl;
-  }
 }
 
 void galaxy::add_satellite(galaxy &satellite){// Adds the satellite to the respective satellites vector
@@ -72,32 +62,43 @@ void galaxy::add_satellite(galaxy &satellite){// Adds the satellite to the respe
 int main()
 {
   // Vector holding the details of all galaxies
-  std::vector<galaxy*> galaxies;
+  std::vector<galaxy *> galaxies;
   // Example using default constructor
-  galaxy NGC5866; 
-  std::cout << "Default constructor values: " << std::endl;
-  NGC5866.print_data();
+  galaxy ngc_5866; 
+  std::cout << "-----------------------------" << std::endl
+            << "Default constructor values: " << std::endl;
+  ngc_5866.print_data();
   // Example using Parameterized constructor
-  std::cout << "Parameterized constructor values: " << std::endl;
+  std::cout << "-----------------------------" << std::endl
+            << "Parameterized constructor values: " << std::endl
+            << "(Including the change of type): " << std::endl;
   // Change Hubble type from Irr to S0
-  NGC5866.change_type("S0");
-  NGC5866.change_name("NGC 5866");
-  NGC5866.change_redshift(0.002);
-  NGC5866.change_total_mass(1e12);
-  NGC5866.change_stellar_mass_fraction(0.03);
-  NGC5866.print_data();
-
-  // Andromeda Details
-  galaxy andromeda("Andromeda","Sa", 0.002430, 1e11, 0.34);
+  ngc_5866.change_type("S0");
+  ngc_5866.change_name("NGC 5866");
+  ngc_5866.change_redshift(0.002);
+  ngc_5866.change_total_mass(1e12);
+  ngc_5866.change_stellar_mass_fraction(0.03);
+  ngc_5866.print_data();
+  std::cout << "-----------------------------" << std::endl;
+  // NGC 5236 Details
+  galaxy ngc_5236("NGC 5236","Sa", 0.002430, 1e11, 0.34);
   galaxy M32("M32","E2", 0.004486, 5.4e9, 0.13);
   galaxy M110("M110","E5", 0.005875, 2e10, 0.11);
-  andromeda.add_satellite(M32);
-  andromeda.add_satellite(M110);
+  ngc_5236.add_satellite(M32);
+  ngc_5236.add_satellite(M110);
 
-  galaxies.push_back(&NGC5866);
-  galaxies.push_back(&andromeda);
+
+  galaxies.push_back(&ngc_5236);
+  galaxies.push_back(&ngc_5866);
+  std::cout << "All galaxies and satellites print out: " << std::endl;
+  int galaxy_number{1};
   for (auto iterator = galaxies.begin(); iterator != galaxies.end(); iterator++) {
+    std::cout << "-----------------------------" << std::endl;
+    std::cout << "Galaxy " << galaxy_number << " ";
     (*iterator)->print_data();
-  return 0;
+    galaxy_number++;
   }
+  std::cout << "Input anything to exit " << std::endl; 
+  std::cin.ignore();  
+  std::cin.get();
 }
