@@ -44,7 +44,7 @@ void galaxy::print_data(){// Print out an object's data
   "The stellar mass fraction is " << stellar_mass_fraction << std::endl <<
   "The stellar mass is " << stellar_mass() << std::endl;
 
-  if (satellites.size() > 0){
+  if (satellites.size() > 0){//Prints out the satellites if present
     std::cout << "---" << name << " has " << satellites.size() << " satellites---" << std::endl;
     int satellite_number{1};
     for (auto iterator = satellites.begin(); iterator != satellites.end(); iterator++) {
@@ -81,22 +81,23 @@ int main()
   ngc_5866.print_data();
   std::cout << "-----------------------------" << std::endl;
 
+  // galaxies
   galaxy ngc_5236("Southern Pinwheel Galaxy","Sa", 0.002430, 1.3e11, 0.0343);
   galaxy ngc_4826("Black Eye Galaxy","Sb",0.001361, 2.3e11,0.0412);
-
+  // galaxies with satellites;
   galaxy milky_way("Milky Way Galaxy","Sb",0,0.5e12,0.032);
-  galaxy large_magellanic_cloud("Large Magellanic Cloud","Sb",0,1e11,0.02);
-  galaxy sagittarius_dwarf_spheroidal("Sagittarius Dwarf Spheroidal Galaxy","E0",0,7e9,0.04);
-  milky_way.add_satellite(large_magellanic_cloud);
-  milky_way.add_satellite(sagittarius_dwarf_spheroidal);
-
+    galaxy large_magellanic_cloud("Large Magellanic Cloud","Sb",0,1e11,0.02);
+    galaxy sagittarius_dwarf_spheroidal("Sagittarius Dwarf Spheroidal Galaxy","E0",0,7e9,0.04);
+    milky_way.add_satellite(large_magellanic_cloud);
+    milky_way.add_satellite(sagittarius_dwarf_spheroidal);
+  // push to vector of galaxies ready for print out
   galaxies.push_back(&ngc_5236);
   galaxies.push_back(&ngc_4826);
   galaxies.push_back(&milky_way);
   galaxies.push_back(&ngc_5866);
 
   std::cout << "All galaxies and satellites print out: " << std::endl;
-  int galaxy_number{1};
+  int galaxy_number{1}; // counter 
   for (auto iterator = galaxies.begin(); iterator != galaxies.end(); iterator++) {
     std::cout << "-----------------------------" << std::endl;
     std::cout << "Galaxy " << galaxy_number << " ";
