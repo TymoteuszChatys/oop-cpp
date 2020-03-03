@@ -65,8 +65,9 @@ public:
 complex complex::conjugate() const
 {
   complex temporary(real, imaginary);
-  temporary.set_real_part(real);
-  temporary.set_imaginary_part(imaginary*-1);
+  if(imaginary != 0){
+    temporary.set_imaginary_part(imaginary*-1);
+  }
   return temporary;
 }
 
@@ -98,31 +99,32 @@ std::istream & operator>>(std::istream &in_stream, complex &complex_number)
     in_stream.ignore();
   }
   complex_number.set_real_part(real_part);
+
   if ((imaginary_part == 0) || (sign_imaginary_part == '+')){
     complex_number.set_imaginary_part(imaginary_part);
   }
-  else{
+  else if (imaginary_part < 0){
     complex_number.set_imaginary_part(imaginary_part * -1);
   }
+  return in_stream;
 }
 
 // Function to overload << operator for complex numbers
-void dash(){
-  std::cout << "----------------------------------" << std::endl;
+std::string dash(){
+  std::string break_line;
+  break_line = "--------------------------------------";
+  return break_line;
 }
 
 int main()
 {  
-  dash();
-  std::cout << "Complex numbers program ULTRA8000" << std::endl;
-  dash();
+  std::cout << dash() << std::endl << "Complex numbers program ULTRA8000" << std::endl << dash() << std::endl;
   std::cout.precision(3);
   // Create two complex numbers
   complex a{3,4};
   complex b{1,-2};
   std::cout << "Pre-set example, complex numbers: " << std::endl;
-  std::cout << "     " << a <<  "     and     " << b <<std::endl;
-  dash();
+  std::cout << "     " << a <<  "     and     " << b <<std::endl << dash() << std::endl;
   // Get real and imaginary components, modulus and argument
   // Get sum, difference, product and quotient of a and b
   std::cout << "Results: " << std::endl;
@@ -131,32 +133,41 @@ int main()
   std::cout << "product " << a * b <<std::endl;
   std::cout << "quotient " << a / b <<std::endl;
   std::cout << "conjugate of " << a << ": " << a.conjugate() << std::endl;
-  std::cout << "conjugate of " << b << ": " << b.conjugate() << std::endl;
-  dash();
+  std::cout << "conjugate of " << b << ": " << b.conjugate() << std::endl << dash() << std::endl;
   // Print out results, also demonstrating use of overloaded operator<<
   // Show results of overloading arithmetic operators
-
-  complex first_complex_number;
-  complex second_complex_number;
-
-  std::cout << first_complex_number << std::endl;
-  std::cout << "Enter first complex number: " << std::endl;
-  std::cin >> first_complex_number;
-  std::cout << "Enter second complex number: " << std::endl;
-  std::cin >> second_complex_number;
-  dash();
-  std::cout << "Your complex numbers: " << std::endl;
-  std::cout << " " << first_complex_number <<  " and " << second_complex_number <<std::endl;
-  dash();
-  std::cout << "Results: " << std::endl;
-  std::cout << "sum " <<  first_complex_number + second_complex_number <<std::endl;
-  std::cout << "difference " << first_complex_number - second_complex_number <<std::endl;
-  std::cout << "product " << first_complex_number * second_complex_number <<std::endl;
-  std::cout << "quotient " << first_complex_number / second_complex_number <<std::endl;
-  std::cout << "conjugate of " << first_complex_number << ": " << first_complex_number.conjugate() << std::endl;
-  std::cout << "conjugate of " << second_complex_number << ": " << second_complex_number.conjugate() << std::endl;
-  dash();
-
-
+  bool to_stop{};
+  std::string string_to_stop;
+  do{
+    std::cout << "enter more complex numbers? (y/n)" << std::endl;
+    std::cout << "complex number in format a+ib" << std::endl;
+    std::cout << "a and b to be specified even if zero." << std::endl  << dash() << std::endl;
+    getline(std::cin, string_to_stop);
+    if(string_to_stop=="n"){
+      to_stop = true;
+    }
+    else if(string_to_stop=="y"){
+      complex first_complex_number;
+      complex second_complex_number;
+      std::cout << std::endl << "Enter first complex number: " << std::endl << dash() << std::endl;
+      std::cin >> first_complex_number;
+      std::cin.ignore();
+      std::cout << dash() << std::endl << "Enter second complex number: " << std::endl << dash() << std::endl;;
+      std::cin >> second_complex_number;
+      std::cin.ignore();
+      std::cout << dash() << std::endl << "Your complex numbers: " << std::endl << dash() <<std::endl;
+      std::cout << " " << first_complex_number <<  " and " << second_complex_number <<std::endl << dash() << std::endl;
+      std::cout << "Results: " << std::endl;
+      std::cout << "sum " <<  first_complex_number + second_complex_number <<std::endl;
+      std::cout << "difference " << first_complex_number - second_complex_number <<std::endl;
+      std::cout << "product " << first_complex_number * second_complex_number <<std::endl;
+      std::cout << "quotient " << first_complex_number / second_complex_number <<std::endl;
+      std::cout << "conjugate of " << first_complex_number << ": " << first_complex_number.conjugate() << std::endl;
+      std::cout << "conjugate of " << second_complex_number << ": " << second_complex_number.conjugate() << std::endl << dash() << std::endl;
+    }
+  }while(to_stop == false);
+  std::cout << "Input anything to exit " << std::endl; 
+  std::cin.ignore();  
+  std::cin.get(); 
   return 0;
 }
