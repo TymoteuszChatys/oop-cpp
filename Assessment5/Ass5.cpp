@@ -88,7 +88,15 @@ std::istream & operator>>(std::istream &in_stream, complex &complex_number)
   char sign_imaginary_part;
 
   in_stream >> real_part >> sign_imaginary_part >> imaginary_part;
-  in_stream.ignore();
+  //This will fail due to the 'i' after sign_imaginary_part so we need a statement:
+  if(in_stream.fail()){
+    in_stream.clear();
+    in_stream.ignore();
+    in_stream >> imaginary_part;
+  }
+  else{
+    in_stream.ignore();
+  }
   complex_number.set_real_part(real_part);
   if ((imaginary_part == 0) || (sign_imaginary_part == '+')){
     complex_number.set_imaginary_part(imaginary_part);
@@ -130,9 +138,25 @@ int main()
 
   complex first_complex_number;
   complex second_complex_number;
+
   std::cout << first_complex_number << std::endl;
+  std::cout << "Enter first complex number: " << std::endl;
   std::cin >> first_complex_number;
+  std::cout << "Enter second complex number: " << std::endl;
   std::cin >> second_complex_number;
-  std::cout << first_complex_number << std::endl;
+  dash();
+  std::cout << "Your complex numbers: " << std::endl;
+  std::cout << " " << first_complex_number <<  " and " << second_complex_number <<std::endl;
+  dash();
+  std::cout << "Results: " << std::endl;
+  std::cout << "sum " <<  first_complex_number + second_complex_number <<std::endl;
+  std::cout << "difference " << first_complex_number - second_complex_number <<std::endl;
+  std::cout << "product " << first_complex_number * second_complex_number <<std::endl;
+  std::cout << "quotient " << first_complex_number / second_complex_number <<std::endl;
+  std::cout << "conjugate of " << first_complex_number << ": " << first_complex_number.conjugate() << std::endl;
+  std::cout << "conjugate of " << second_complex_number << ": " << second_complex_number.conjugate() << std::endl;
+  dash();
+
+
   return 0;
 }
