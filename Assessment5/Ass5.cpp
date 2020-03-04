@@ -8,7 +8,7 @@
 
 class complex
 {
-  // Make function to overload operator<< a friend
+  // Friends of the class
   friend std::ostream & operator<<(std::ostream &out_stream, const complex &complex_number);
   friend std::istream & operator<<(std::istream &in_stream, const complex &complex_number);
 private:
@@ -20,15 +20,27 @@ public:
   ~complex(){}
 
   // Get functions
-  double get_real_part() const {return real;}
-  double get_imaginary_part() const {return imaginary;}
+  double get_real_part() const {
+    return real;
+  }
+  double get_imaginary_part() const {
+    return imaginary;
+  }
   // Set functions
-  void set_real_part(const double new_real) {real = new_real;}
-  void set_imaginary_part(const double new_imaginary) {imaginary = new_imaginary;}
+  void set_real_part(const double new_real) {
+    real = new_real;
+  }
+  void set_imaginary_part(const double new_imaginary) {
+    imaginary = new_imaginary;
+  }
   // Return modulus
-  double modulus() const {return sqrt(real*real+imaginary*imaginary);}
+  double modulus() const {
+    return sqrt(real*real+imaginary*imaginary);
+  }
   // Return argument
-  double argument() const {return atan2(imaginary,real);}
+  double argument() const {
+    return atan2(imaginary,real);
+  }
   // Return complex conjugate function (outside class)
   complex conjugate() const;
   // Overload + operator for addition 
@@ -61,7 +73,7 @@ public:
   return temp;
   }
 };
-
+//calculates the conjugate (flips the imaginary sign)
 complex complex::conjugate() const
 {
   complex temporary(real, imaginary);
@@ -70,7 +82,7 @@ complex complex::conjugate() const
   }
   return temporary;
 }
-
+//Outstream operator overload
 std::ostream & operator<<(std::ostream &out_stream, const complex &complex_number)
 {
   if (complex_number.imaginary >= 0){
@@ -81,15 +93,15 @@ std::ostream & operator<<(std::ostream &out_stream, const complex &complex_numbe
   }
   return out_stream;
 }
-
+//Instream operator overload function
 std::istream & operator>>(std::istream &in_stream, complex &complex_number)
 {
   double real_part;
   double imaginary_part;
   char sign_imaginary_part;
-
+  //In order to make it work for a+bi and a+ib we have the following code:
   in_stream >> real_part >> sign_imaginary_part >> imaginary_part;
-  //This will fail due to the 'i' after sign_imaginary_part so we need a statement:
+  //This will fail due to the 'i' after sign_imaginary_part in case of a+ib format so we need a statement:
   if(in_stream.fail()){
     in_stream.clear();
     in_stream.ignore();
@@ -103,9 +115,10 @@ std::istream & operator>>(std::istream &in_stream, complex &complex_number)
   if ((imaginary_part == 0) || (sign_imaginary_part == '+')){
     complex_number.set_imaginary_part(imaginary_part);
   }
-  else if (imaginary_part < 0){
+  else if (sign_imaginary_part == '-'){
     complex_number.set_imaginary_part(imaginary_part * -1);
   }
+  
   return in_stream;
 }
 
@@ -117,16 +130,17 @@ std::string dash(){
 }
 
 int main()
-{  
-  std::cout << dash() << std::endl << "Complex numbers program ULTRA8000" << std::endl << dash() << std::endl;
+{ 
+  // Introductory output
+  std::cout << dash() << std::endl << "Complex numbers program by T Chatys" << std::endl << dash() << std::endl;
+  // Sets precision of output
   std::cout.precision(3);
   // Create two complex numbers
   complex a{3,4};
   complex b{1,-2};
   std::cout << "Pre-set example, complex numbers: " << std::endl;
   std::cout << "     " << a <<  "     and     " << b <<std::endl << dash() << std::endl;
-  // Get real and imaginary components, modulus and argument
-  // Get sum, difference, product and quotient of a and b
+  // //Output the results of preset example:
   std::cout << "Results: " << std::endl;
   std::cout << "sum " <<  a + b <<std::endl;
   std::cout << "difference " << a - b <<std::endl;
@@ -134,27 +148,31 @@ int main()
   std::cout << "quotient " << a / b <<std::endl;
   std::cout << "conjugate of " << a << ": " << a.conjugate() << std::endl;
   std::cout << "conjugate of " << b << ": " << b.conjugate() << std::endl << dash() << std::endl;
-  // Print out results, also demonstrating use of overloaded operator<<
-  // Show results of overloading arithmetic operators
+
   bool to_stop{};
   std::string string_to_stop;
   do{
-    std::cout << "enter more complex numbers? (y/n)" << std::endl;
     std::cout << "complex number in format a+ib" << std::endl;
-    std::cout << "a and b to be specified even if zero." << std::endl  << dash() << std::endl;
+    std::cout << "a and b to be specified even if zero." << std::endl ;
+    std::cout << "enter more complex numbers? (y/n)" << std::endl << dash() << std::endl;
+    //Asks user whether to continue
     getline(std::cin, string_to_stop);
     if(string_to_stop=="n"){
+      //If n is entered exit while loop;
       to_stop = true;
     }
     else if(string_to_stop=="y"){
+      //Ask for first complex number
       complex first_complex_number;
-      complex second_complex_number;
       std::cout << std::endl << "Enter first complex number: " << std::endl << dash() << std::endl;
       std::cin >> first_complex_number;
       std::cin.ignore();
+      //Ask for second complex number
+      complex second_complex_number;
       std::cout << dash() << std::endl << "Enter second complex number: " << std::endl << dash() << std::endl;;
       std::cin >> second_complex_number;
       std::cin.ignore();
+      //Output the results:
       std::cout << dash() << std::endl << "Your complex numbers: " << std::endl << dash() <<std::endl;
       std::cout << " " << first_complex_number <<  " and " << second_complex_number <<std::endl << dash() << std::endl;
       std::cout << "Results: " << std::endl;
@@ -166,6 +184,7 @@ int main()
       std::cout << "conjugate of " << second_complex_number << ": " << second_complex_number.conjugate() << std::endl << dash() << std::endl;
     }
   }while(to_stop == false);
+  //End program at input
   std::cout << "Input anything to exit " << std::endl; 
   std::cin.ignore();  
   std::cin.get(); 
