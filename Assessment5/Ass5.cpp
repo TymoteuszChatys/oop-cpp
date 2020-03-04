@@ -10,7 +10,7 @@ class complex
 {
   // Friends of the class
   friend std::ostream & operator<<(std::ostream &out_stream, const complex &complex_number);
-  friend std::istream & operator<<(std::istream &in_stream, const complex &complex_number);
+  friend std::istream & operator>>(std::istream &in_stream, const complex &complex_number);
 private:
   double real,imaginary;
 public:
