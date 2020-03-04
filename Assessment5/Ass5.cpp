@@ -122,7 +122,7 @@ std::istream & operator>>(std::istream &in_stream, complex &complex_number)
   return in_stream;
 }
 
-// Function to overload << operator for complex numbers
+// Function to return a break for a better viewing experience
 std::string dash(){
   std::string break_line;
   break_line = "--------------------------------------";
