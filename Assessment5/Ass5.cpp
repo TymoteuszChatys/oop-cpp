@@ -1,11 +1,11 @@
 // PHYS 30762 Programming in C++
-// Assignment 5 - skeleton code
-
-// Class for complex numbers
+// Assignment 5 - Tymoteusz Chatys
 
 #include<iostream>
 #include<cmath>
+#include<string>
 
+// Class for complex numbers
 class complex
 {
   // Friends of the class
