@@ -1,5 +1,6 @@
 // PHYS 30762 Programming in C++
 // Assignment 5 - Tymoteusz Chatys
+// 6th March 2020
 
 #include<iostream>
 #include<cmath>
