@@ -14,7 +14,7 @@
 class matrix
 {
   // Friends
-  friend ostream & operator<<(ostream &os, const matrix &mat);
+  friend std::ostream & operator<<(std::ostream &os, const matrix &mat);
 private:
   double *matrix_data {nullptr};
   int rows{0};
@@ -36,7 +36,7 @@ public:
   int index(int m, int n) const // Return position in array of element (m,n)
   {
     if(m>0 && m<=rows && n>0 && n<=columns) return (n-1)+(m-1)*columns;
-    else {std::cout<<"Error: out of range"<<endl; exit(1);}
+    else {std::cout<<"Error: out of range"<<std::endl; exit(1);}
   }
   double & operator()(int m, int n) {return m_data[index(m,n)];}
   // Other access functions go here
@@ -59,7 +59,7 @@ public:
 
 
 // Overload insertion to output stream for matrices
-ostream & operator<<(ostream &os, const matrix &mat)
+std::ostream & operator<<(std::ostream &os, const matrix &mat)
 {
   // Code goes here
 
