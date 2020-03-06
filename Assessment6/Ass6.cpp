@@ -52,7 +52,7 @@ public:
   //Addition, Subtraction and Multiplication overloading
   matrix operator+(const matrix&) const;
   matrix operator-(const matrix&) const; 
-  matrix opeartor*(const matrix&) const;
+  matrix operator*(const matrix&) const;
 
   //Calculation of the determinant
   matrix minor(int, int) const;

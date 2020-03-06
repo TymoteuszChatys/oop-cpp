@@ -16,30 +16,36 @@ private:
   double real,imaginary;
 public:
   // Constructors & destructor
-  complex(){real=imaginary=0;}
+  complex(){real=imaginary={};}
   complex(double real_part, double imaginary_part) : real{real_part}, imaginary{imaginary_part} {}
   ~complex(){}
 
   // Get functions
-  double get_real_part() const {
+  double get_real_part() const 
+  {
     return real;
   }
-  double get_imaginary_part() const {
+  double get_imaginary_part() const 
+  {
     return imaginary;
   }
   // Set functions
-  void set_real_part(const double new_real) {
+  void set_real_part(const double new_real) 
+  {
     real = new_real;
   }
-  void set_imaginary_part(const double new_imaginary) {
+  void set_imaginary_part(const double new_imaginary) 
+  {
     imaginary = new_imaginary;
   }
   // Return modulus
-  double modulus() const {
+  double modulus() const 
+  {
     return sqrt(real*real+imaginary*imaginary);
   }
   // Return argument
-  double argument() const {
+  double argument() const 
+  {
     return atan2(imaginary,real);
   }
   // Return complex conjugate function (outside class)
@@ -91,8 +97,7 @@ std::ostream & operator<<(std::ostream &out_stream, const complex &complex_numbe
 {
   if (complex_number.imaginary >= 0){
     out_stream<<complex_number.real<<"+i"<<complex_number.imaginary;
-  }
-  else{
+  }else{
     out_stream<<complex_number.real<<"-i"<<abs(complex_number.imaginary);
   }
   return out_stream;
@@ -110,16 +115,14 @@ std::istream & operator>>(std::istream &in_stream, complex &complex_number)
     in_stream.clear();
     in_stream.ignore();
     in_stream >> imaginary_part;
-  }
-  else{
+  }else{
     in_stream.ignore();
   }
   complex_number.set_real_part(real_part);
 
   if ((imaginary_part == 0) || (sign_imaginary_part == '+')){
     complex_number.set_imaginary_part(imaginary_part);
-  }
-  else if (sign_imaginary_part == '-'){
+  }else if (sign_imaginary_part == '-'){
     complex_number.set_imaginary_part(imaginary_part * -1);
   }
   
@@ -164,8 +167,7 @@ int main()
     if(string_to_stop=="n"){
       //If n is entered exit while loop;
       to_stop = true;
-    }
-    else if(string_to_stop=="y"){
+    }else if(string_to_stop=="y"){
       //Ask for first complex number
       complex first_complex_number;
       std::cout << std::endl << "Enter first complex number: " << std::endl << dash() << std::endl;
