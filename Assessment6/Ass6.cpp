@@ -13,45 +13,50 @@
 
 class matrix
 {
-  // Friends
-  friend std::ostream & operator<<(std::ostream &os, const matrix &mat);
+  // Friends of the class
+  friend std::ostream & operator<<(std::ostream &out_stream, const matrix &the_matrix);
 private:
   double *matrix_data {nullptr};
-  int rows{0};
-  int columns{0};
-public:
-  // Default constructor
-  matrix()= default;
-  // Parameterized constructor
-  
-  // Copy constructor
-
-  // Move constructor
-
+  int rows{};
+  int columns{};
+public: 
+  // Default, Parameterized, Copy, Move Constructor
+  matrix() : rows = {}, columns = {}, matrix_data = {};
+  matrix(int, int); 
+  matrix(const matrix&);
+  matrix(matrix&&); 
   // Destructor
-
+  ~matrix();
   // Access functions
-  int get_rows() const {return rows;} // Return number of rows
-  int get_cols() const {return columns;} // Return number of columns
+  int get_rows() const { // Return number of rows
+    return rows;
+  } 
+  int get_columns() const { // Return number of columns
+    return columns;
+  } 
   int index(int m, int n) const // Return position in array of element (m,n)
   {
-    if(m>0 && m<=rows && n>0 && n<=columns) return (n-1)+(m-1)*columns;
-    else {std::cout<<"Error: out of range"<<std::endl; exit(1);}
+    if(m>0 && m<=rows && n>0 && n<=columns) {
+      return (n-1)+(m-1)*columns;
+    }
+    else {
+      std::cout<<"Error: out of range"<<std::endl; exit(1);
+    }
   }
-  double & operator()(int m, int n) {return m_data[index(m,n)];}
-  // Other access functions go here
+  double & operator()(int m, int n) {
+    return matrix_data[index(m,n)];
+  }
+  //Copy and Move Assignment operators
+  matrix& operator=(const matrix&);
+  matrix& operator=(matrix &&);
+  //Addition, Subtraction and Multiplication overloading
+  matrix operator+(const matrix&) const;
+  matrix operator-(const matrix&) const; 
+  matrix opeartor*(const matrix&) const;
 
-  // Other functions 
-  // Copy  Assignment operator
-
-  // Move Assignment operator
-
-  // Addition, subtraction and multiplication
-
-  // minor
-
-  // determinant
-
+  //Calculation of the determinant
+  matrix minor(int, int) const;
+  double determinant() const;
 };
 
 // Member functions defined outside class
@@ -59,55 +64,30 @@ public:
 
 
 // Overload insertion to output stream for matrices
-std::ostream & operator<<(std::ostream &os, const matrix &mat)
+std::ostream & operator<<(std::ostream &out_stream, const matrix &the_matrix)
 {
   // Code goes here
-
-  return os;
+  return out_stream;
 }
 
 // Main program
 
 int main()
 {
-
   //
   // First part of assignment: constructing and deep copying matrices
   //
 
   // Demonstrate default constructor
-  matrix a1;
-  std::cout<<a1;
-
-  // Parameterized constructor
-  const int m{2};
-  const int n{2};
-  matrix a2{m,n};
+   // Parameterized constructor
   // Set values for a2 here
 
   // Print matrix a2
-  std::cout<<a2;
-
-
   // Deep copy by assignment: define new matrix a3 then copy from a2 to a3
-  matrix a3{m,n};
-  std::cout<<a3;
-  a3=a2;
-  std::cout<<a3;
+
   // Modify contents of original matrix and show assigned matrix is unchanged here
-
-  std::cout<<a2;
-  std::cout<<a3;
- 
-
   // Deep copy using copy constructor 
-  matrix a4{a2};
-  std::cout<<a4;
   // Modify contents of original matrix and show copied matrix is unchanged here
-
-  std::cout<<a2;
-  std::cout<<a4;
-
   // Move copy construction demonstration
 
   // Move assignment demonstration
