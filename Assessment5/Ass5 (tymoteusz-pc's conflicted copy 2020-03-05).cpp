@@ -66,14 +66,14 @@ public:
   // Overload / operator for division, z1/z2
   complex operator/(const complex &complex_number) const
   {
-    complex conjugate = complex_number.conjugate();
-    complex numerator = operator*(conjugate);
-    double denominator = pow(complex_number.modulus(),2);
-    complex temp{numerator.real/denominator, numerator.imaginary/denominator};
-    if (complex_number.real == 0 && complex_number.imaginary == 0){
-      complex temp{std::nan(""), std::nan("")};
-    }
-    return temp;
+  if (complex_number.real == 0 && complex_number.imaginary == 0){
+    return complex(std::nan(""), std::nan(""));
+  }
+  complex conjugate = complex_number.conjugate();
+  complex numerator = operator*(conjugate);
+  double denominator = pow(complex_number.modulus(),2);
+  complex temp{numerator.real/denominator, numerator.imaginary/denominator};
+  return temp;
   }
 };
 //calculates the conjugate (flips the imaginary sign)
