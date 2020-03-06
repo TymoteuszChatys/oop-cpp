@@ -19,7 +19,6 @@ public:
   complex(){real=imaginary={};}
   complex(double real_part, double imaginary_part) : real{real_part}, imaginary{imaginary_part} {}
   ~complex(){}
-
   // Get functions
   double get_real_part() const 
   {
@@ -83,6 +82,7 @@ public:
     return temp;
   }
 };
+
 //calculates the conjugate (flips the imaginary sign)
 complex complex::conjugate() const
 {
@@ -92,6 +92,7 @@ complex complex::conjugate() const
   }
   return temporary;
 }
+
 //Outstream operator overload
 std::ostream & operator<<(std::ostream &out_stream, const complex &complex_number)
 {
@@ -102,6 +103,7 @@ std::ostream & operator<<(std::ostream &out_stream, const complex &complex_numbe
   }
   return out_stream;
 }
+
 //Instream operator overload function
 std::istream & operator>>(std::istream &in_stream, complex &complex_number)
 {
@@ -125,7 +127,6 @@ std::istream & operator>>(std::istream &in_stream, complex &complex_number)
   }else if (sign_imaginary_part == '-'){
     complex_number.set_imaginary_part(imaginary_part * -1);
   }
-  
   return in_stream;
 }
 
