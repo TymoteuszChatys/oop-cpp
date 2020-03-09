@@ -17,35 +17,34 @@ class matrix
   friend std::ostream & operator<<(std::ostream &out_stream, const matrix &the_matrix);
 private:
   double *matrix_data {nullptr};
-  int rows{};
-  int columns{};
+  size_t rows{};
+  size_t columns{};
 public: 
   // Default, Parameterized, Copy, Move Constructor
   matrix();
-  matrix(int a, int b); 
+  matrix(size_t a, size_t b); 
   matrix(const matrix &a_matrix) ;
   matrix(matrix &&a_matrix); 
   // Destructor
   ~matrix(){std::cout<<"Destructor called" << std::endl; delete[] matrix_data;};
   // Access functions
-  int get_rows() const 
+  size_t get_rows() const 
   { // Return number of rows
     return rows;
   } 
-  int get_columns() const 
+  size_t get_columns() const 
   { // Return number of columns
     return columns;
   } 
-  int index(int m, int n) const 
+  size_t index(size_t m, size_t n) const 
   { // Return position in array of element (m,n)
     if(m>0 && m<=rows && n>0 && n<=columns) {
       return (n-1)+(m-1)*columns;
-    }
-    else {
+    }else {
       std::cout<<"Error: out of range"<<std::endl; exit(1);
     }
   }
-  double& operator()(int m, int n) 
+  double& operator()(size_t m, size_t n) 
   {
     return matrix_data[index(m,n)];
   }
@@ -67,7 +66,7 @@ matrix::matrix() : rows{2}, columns{2}
   matrix_data = new double[rows*columns]{};
 }
 //Parameterized constructor
-matrix::matrix(int row_number, int column_number) : rows{row_number} , columns{column_number}
+matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , columns{column_number}
 {
   std::cout<<"Parameterized constructor called" << std::endl;
   if (rows == 0 || columns == 0){
@@ -77,28 +76,29 @@ matrix::matrix(int row_number, int column_number) : rows{row_number} , columns{c
     matrix_data = new double[rows*columns]{};
   }
 }
-//copy constructor
+//Copy constructor
 matrix::matrix(const matrix &a_matrix) : rows{a_matrix.rows} , columns{a_matrix.columns}
 {
   std::cout << "copy constructor" << std::endl; 
   size_t size = rows*columns;
-  new_matrix = new double[size]{};
-  for(size_t i{}; i<size; i++;){
-    a_matrix[i] = matrix.new_matrix[i];
-  }
+  matrix_data = nullptr;
+  if(size>0){
+    matrix_data = new double[size]{};
+    for(size_t i{}; i<size; i++){
+      matrix_data[i] = a_matrix.matrix_data[i]; 
+    }
+  } 
 }
-//Move constructor
+//Move constructor (steals the data)
 matrix::matrix(matrix &&a_matrix)
 {
   std::cout << "move constructor" << std::endl;
   rows = a_matrix.rows;
   columns = a_matrix.columns;
   matrix_data = a_matrix.matrix_data;
+  a_matrix.rows, a_matrix.columns = {};
+  a_matrix.matrix_data = nullptr;
 }
-// Member functions defined outside class
-
-
-
 // Overload insertion to output stream for matrices
 std::ostream & operator<<(std::ostream &out_stream, const matrix &the_matrix)
 {
