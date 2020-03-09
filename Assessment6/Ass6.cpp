@@ -1,7 +1,11 @@
 // PHYS 30762 Programming in C++
+// Tymoteusz Chatys
+// 9th March 2020
 // Assignment 6
+/*
+Input example: 
+1 2 12 2 5 7 12 2 1
 
-/*  
 Output example:
 |1 2 12|
 |2 5 7|
@@ -76,13 +80,11 @@ public:
 //Default constructor
 matrix::matrix() : rows{2}, columns{2}
 {
-  std::cout<<"Default constructor called" << std::endl; 
   matrix_data = new double[rows*columns]{};
 }
 //Parameterized constructor
 matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , columns{column_number}
 {
-  std::cout<<"Parameterized constructor called" << std::endl;
   if (rows == 0 || columns == 0){
     std::cout << "Error: 0 dimensional matrix";
     exit(1);
@@ -93,7 +95,6 @@ matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , col
 //Copy constructor
 matrix::matrix(const matrix &a_matrix) : rows{a_matrix.rows} , columns{a_matrix.columns}
 {
-  std::cout << "Copy constructor" << std::endl; 
   size_t size = rows*columns;
   matrix_data = nullptr;
   if(size>0){
@@ -106,7 +107,6 @@ matrix::matrix(const matrix &a_matrix) : rows{a_matrix.rows} , columns{a_matrix.
 //Move constructor (steals the data)
 matrix::matrix(matrix &&a_matrix)
 {
-  std::cout << "Move constructor" << std::endl;
   rows = a_matrix.rows;
   columns = a_matrix.columns;
   matrix_data = a_matrix.matrix_data;
@@ -116,7 +116,6 @@ matrix::matrix(matrix &&a_matrix)
 //Copy assignment operator
 matrix & matrix::operator=(matrix &a_matrix)
 {
-  std::cout << "Copy assignment" << std::endl;
   if(&a_matrix == this){ //no self assignment
     return *this;
   } 
@@ -139,7 +138,6 @@ matrix & matrix::operator=(matrix &a_matrix)
 //Move assignment operator
 matrix & matrix::operator=(matrix &&a_matrix)
 {
-  std::cout << "Move assignment" <<std::endl;
   std::swap(rows,a_matrix.rows);
   std::swap(columns,a_matrix.columns);
   std::swap(matrix_data,a_matrix.matrix_data);
@@ -162,7 +160,12 @@ std::ostream & operator<<(std::ostream &out_stream, const matrix &a_matrix)
         if(j==1){
           out_stream << '|' << " " << a_matrix.matrix_data[a_matrix.index(i,j)] << " ";
         }else if(j==a_matrix.columns){
-          out_stream << a_matrix.matrix_data[a_matrix.index(i,j)] << " " << '|' << std::endl; 
+            if(i==a_matrix.rows){
+              out_stream << a_matrix.matrix_data[a_matrix.index(i,j)] << " " << '|'; //Last row we dont need a new line for proceeding rows. 
+            }else{
+              out_stream << a_matrix.matrix_data[a_matrix.index(i,j)] << " " << '|' << std::endl;
+            }
+          
         }else {
           out_stream << a_matrix.matrix_data[a_matrix.index(i,j)] << " ";
         }
@@ -171,10 +174,13 @@ std::ostream & operator<<(std::ostream &out_stream, const matrix &a_matrix)
   }
   return out_stream;
 }
-
 //Overload >> operator to input matrices
 std::istream &operator>>(std::istream &in_stream, matrix &a_matrix) 
 { 
+  /*
+  Input example: 
+  1 2 12 2 5 7 12 2 1
+  */
   //Get the number of rows and columns
   size_t number_of_rows, number_of_columns; 
   std::cout << "Enter the number of rows: ";
@@ -208,39 +214,42 @@ std::istream &operator>>(std::istream &in_stream, matrix &a_matrix)
   }
   return in_stream;
 }
-//Main program
 
+// Function to return a break line for a better viewing experience
+std::string dash(){
+  std::string break_line;
+  break_line = "--------------------------------------";
+  return break_line;
+}
+
+//Main program
 int main()
 {
-  //
-  // First part of assignment: constructing and deep copying matrices
-  //
-
-  // Demonstrate default constructor
+  std::cout << dash() << std::endl << "Matrix calculator" << std::endl << dash() << std::endl;
+  //Demonstrate default constructor
   matrix a1;
-  std::cout<<a1;
-   // Parameterized constructor
+  std::cout << "Default constructor: " << std::endl << a1 << std::endl << dash() << std::endl;
+  //Demonstrate parameterized constructor
   const int m{2};
   const int n{2};
   matrix a2;
-  // Set values for a2 here
   std::cin >> a2;
-  // Print matrix a2
-  std::cout<<a2;
+  std::cout << "Parameterized constructor: " << std::endl << a2 << std::endl << dash() << std::endl; 
   // Deep copy by assignment: define new matrix a3 then copy from a2 to a3
+  std::cout << "Deep copy by assignmnent: " << std::endl;
   matrix a3{m,n};
-  std::cout<<a3;
+  std::cout << "Default: " << std::endl << a3 << std::endl; 
   a3=a2;
-  std::cout<<a3;
+  std::cout << "Deep copy: " << std::endl << a3 << std::endl << dash() << std::endl; 
   // Modify contents of original matrix and show assigned matrix is unchanged here
-  std::cout<<a2;
-  std::cout<<a3;
+ // std::cout<<a2;
+  //std::cout<<a3;
   // Deep copy using copy constructor 
-  matrix a4{a2};
-  std::cout<<a4;
+ // matrix a4{a2};
+  //std::cout<<a4;
   // Modify contents of original matrix and show copied matrix is unchanged here
-  std::cout<<a2;
-  std::cout<<a4;
+  //std::cout<<a2;
+  //std::cout<<a4;
   // Move copy construction demonstration
 
   // Move assignment demonstration
