@@ -42,6 +42,7 @@ public:
       return (n-1)+(m-1)*columns;
     }else {
       std::cout<<"Error: out of range"<<std::endl; exit(1);
+      throw("Out of Bounds error");
     }
   }
   double& operator()(size_t m, size_t n) 
@@ -59,6 +60,7 @@ public:
   matrix minor(int, int) const;
   double determinant() const;
 };
+
 //Default constructor
 matrix::matrix() : rows{2}, columns{2}
 {
@@ -79,7 +81,7 @@ matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , col
 //Copy constructor
 matrix::matrix(const matrix &a_matrix) : rows{a_matrix.rows} , columns{a_matrix.columns}
 {
-  std::cout << "copy constructor" << std::endl; 
+  std::cout << "Copy constructor" << std::endl; 
   size_t size = rows*columns;
   matrix_data = nullptr;
   if(size>0){
@@ -92,7 +94,7 @@ matrix::matrix(const matrix &a_matrix) : rows{a_matrix.rows} , columns{a_matrix.
 //Move constructor (steals the data)
 matrix::matrix(matrix &&a_matrix)
 {
-  std::cout << "move constructor" << std::endl;
+  std::cout << "Move constructor" << std::endl;
   rows = a_matrix.rows;
   columns = a_matrix.columns;
   matrix_data = a_matrix.matrix_data;
@@ -102,7 +104,7 @@ matrix::matrix(matrix &&a_matrix)
 //Copy assignment operator
 matrix & matrix::operator=(matrix &a_matrix)
 {
-  std::cout << "copy assignment" << std::endl;
+  std::cout << "Copy assignment" << std::endl;
   if(&a_matrix == this){ //no self assignment
     return *this;
   } 
@@ -120,19 +122,28 @@ matrix & matrix::operator=(matrix &a_matrix)
       matrix_data[i] = a_matrix.matrix_data[i];
     }
   }
+  return *this;
 }
 //Move assignment operator
 matrix & matrix::operator=(matrix &&a_matrix)
 {
-  std::cout << "move assignment" <<std::endl;
+  std::cout << "Move assignment" <<std::endl;
   std::swap(rows,a_matrix.rows);
   std::swap(columns,a_matrix.columns);
   std::swap(matrix_data,a_matrix.matrix_data);
+  return *this;
 }
-//Overload insertion to output stream for matrices
+//Overload << operator to output matrices
 std::ostream & operator<<(std::ostream &out_stream, const matrix &the_matrix)
 {
-  // Code goes here
+  /*  
+  Output example:
+  |1| |2| |12|
+  |2| |5| |7|
+  |12| |2| |1|
+  */
+  
+
   return out_stream;
 }
 
