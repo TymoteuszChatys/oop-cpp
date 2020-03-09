@@ -99,7 +99,37 @@ matrix::matrix(matrix &&a_matrix)
   a_matrix.rows, a_matrix.columns = {};
   a_matrix.matrix_data = nullptr;
 }
-// Overload insertion to output stream for matrices
+//Copy assignment operator
+matrix & matrix::operator=(matrix &a_matrix)
+{
+  std::cout << "copy assignment" << std::endl;
+  if(&a_matrix == this){ //no self assignment
+    return *this;
+  } 
+  //First need to delete the objects array
+  delete[] matrix_data;
+  matrix_data = nullptr;
+  rows = {};
+  columns = {};
+  //Copy the size and declare new array
+  size_t size = a_matrix.rows*a_matrix.columns;
+  if(size>0){
+    matrix_data = new double[size];
+    //Copy values into new array
+    for(size_t i{}; i<size;i++){
+      matrix_data[i] = a_matrix.matrix_data[i];
+    }
+  }
+}
+//Move assignment operator
+matrix & matrix::operator=(matrix &&a_matrix)
+{
+  std::cout << "move assignment" <<std::endl;
+  std::swap(rows,a_matrix.rows);
+  std::swap(columns,a_matrix.columns);
+  std::swap(matrix_data,a_matrix.matrix_data);
+}
+//Overload insertion to output stream for matrices
 std::ostream & operator<<(std::ostream &out_stream, const matrix &the_matrix)
 {
   // Code goes here
