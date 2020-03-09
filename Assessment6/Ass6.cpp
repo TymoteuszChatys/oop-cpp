@@ -1,13 +1,12 @@
 // PHYS 30762 Programming in C++
 // Assignment 6
 
-// A matrix class - skeleton code
-
-// You are advised to write your own code from scratch but
-// you may use this code if you do not know how to get started.
-
-// Note: for longer functions, you are advised to prototype them
-// within class and put the function code itself immediately below class. 
+/*  
+Output example:
+|1 2 12|
+|2 5 7|
+|12 2 1|
+*/
 
 #include<iostream>
 
@@ -22,22 +21,45 @@ private:
 public: 
   // Default, Parameterized, Copy, Move Constructor
   matrix();
-  matrix(size_t a, size_t b); 
+  matrix(size_t n, size_t m); 
   matrix(const matrix &a_matrix) ;
   matrix(matrix &&a_matrix); 
   // Destructor
   ~matrix(){std::cout<<"Destructor called" << std::endl; delete[] matrix_data;};
-  // Access functions
+  //Copy and Move Assignment operators
+  matrix& operator=(matrix &a_matrix);
+  matrix& operator=(matrix &&a_matrix);
+  //Addition, Subtraction and Multiplication overloading
+  matrix operator+(const matrix &a_matrix) const;
+  matrix operator-(const matrix &a_matrix) const; 
+  matrix operator*(const matrix &a_matrix) const;
+  //Calculation of the determinant
+  matrix minor(size_t n, size_t m) const;
+  double determinant() const;
+
+  //Access functions
+  void set_value(const size_t &i, const size_t &j, const double &value)
+  {//Set value of i,j component of the matrix
+    matrix_data[((j-1) + (i-1) * columns)] = value;
+  }
+  void set_rows(const size_t &new_rows)
+  {
+    rows = new_rows;
+  }
+  void set_columns(const size_t &new_columns)
+  {
+    columns = new_columns;
+  }
   size_t get_rows() const 
-  { // Return number of rows
+  {
     return rows;
   } 
   size_t get_columns() const 
-  { // Return number of columns
+  {
     return columns;
   } 
   size_t index(size_t m, size_t n) const 
-  { // Return position in array of element (m,n)
+  {//Return position in array of element (m,n)
     if(m>0 && m<=rows && n>0 && n<=columns) {
       return (n-1)+(m-1)*columns;
     }else {
@@ -49,16 +71,6 @@ public:
   {
     return matrix_data[index(m,n)];
   }
-  //Copy and Move Assignment operators
-  matrix& operator=(matrix &a_matrix);
-  matrix& operator=(matrix &&a_matrix);
-  //Addition, Subtraction and Multiplication overloading
-  matrix operator+(const matrix &a_matrix) const;
-  matrix operator-(const matrix &a_matrix) const; 
-  matrix operator*(const matrix &a_matrix) const;
-  //Calculation of the determinant
-  matrix minor(int, int) const;
-  double determinant() const;
 };
 
 //Default constructor
@@ -134,20 +146,69 @@ matrix & matrix::operator=(matrix &&a_matrix)
   return *this;
 }
 //Overload << operator to output matrices
-std::ostream & operator<<(std::ostream &out_stream, const matrix &the_matrix)
-{
+std::ostream & operator<<(std::ostream &out_stream, const matrix &a_matrix)
+{ 
   /*  
   Output example:
-  |1| |2| |12|
-  |2| |5| |7|
-  |12| |2| |1|
+  |1 2 12|
+  |2 5 7|
+  |12 2 1|
   */
-  
-
+  for(size_t i=1; i<a_matrix.rows+1; i++){
+    for (size_t j=1; j<a_matrix.columns+1; j++){
+      if(a_matrix.columns==1){ //Single column special case
+        out_stream << '|' << " " << a_matrix.matrix_data[a_matrix.index(i,j)] << " " << '|' << std::endl;
+      }else{
+        if(j==1){
+          out_stream << '|' << " " << a_matrix.matrix_data[a_matrix.index(i,j)] << " ";
+        }else if(j==a_matrix.columns){
+          out_stream << a_matrix.matrix_data[a_matrix.index(i,j)] << " " << '|' << std::endl; 
+        }else {
+          out_stream << a_matrix.matrix_data[a_matrix.index(i,j)] << " ";
+        }
+      }
+    }
+  }
   return out_stream;
 }
 
-// Main program
+//Overload >> operator to input matrices
+std::istream &operator>>(std::istream &in_stream, matrix &a_matrix) 
+{ 
+  //Get the number of rows and columns
+  size_t number_of_rows, number_of_columns; 
+  std::cout << "Enter the number of rows: ";
+  std::cin >> number_of_rows;
+  if (std::cin.fail() || number_of_rows == 0) {
+    std::cout<<"Error: invalid input"<<std::endl; exit(1);
+    throw("positive integer error");
+  }
+  std::cout << "Enter the number of columns: ";
+  std::cin >> number_of_columns;
+  if (std::cin.fail() || number_of_columns == 0) {
+    std::cout<<"Error: invalid input"<<std::endl; exit(1);
+    throw("positive integer error");
+  }
+  a_matrix.set_rows(number_of_rows);
+  a_matrix.set_columns(number_of_columns);
+  //Get matrix values 
+  std::cout << "Enter values of the matrix (" << number_of_rows*number_of_columns << " values)" << std::endl;
+  //Loop to fill the matrix from input
+  double temporary; 
+  for (size_t i=1; i < number_of_rows+1; i++) {
+    for (size_t j=1; j < number_of_columns+1; j++) {
+      std::cin >> temporary;             
+      a_matrix.set_value(i,j, temporary); 
+      std::cin.ignore();
+      if (std::cin.fail()) {
+        std::cout<<"Error: invalid input"<<std::endl; exit(1);
+        throw("new element of matrix error");
+      }
+    }
+  }
+  return in_stream;
+}
+//Main program
 
 int main()
 {
@@ -161,8 +222,9 @@ int main()
    // Parameterized constructor
   const int m{2};
   const int n{2};
-  matrix a2{m,n};
+  matrix a2;
   // Set values for a2 here
+  std::cin >> a2;
   // Print matrix a2
   std::cout<<a2;
   // Deep copy by assignment: define new matrix a3 then copy from a2 to a3
