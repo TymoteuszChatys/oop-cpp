@@ -279,11 +279,24 @@ matrix matrix::operator*(const matrix& a_matrix) const
   }
 	return result_matrix;
 }
-//return a matrix with the ith row and jth column deleted
-matrix minor(size_t row_to_delete, size_t column_to_delete) const
+//Return a matrix with the ith row and jth column deleted
+matrix matrix::minor(size_t row_to_delete, size_t column_to_delete) const
 {
   matrix reduced_matrix(rows-1,columns-1);
-
+  size_t new_index{};
+	for (size_t index{1}; index < rows*columns+1; index++){
+    //Skip columns and rows that are to be deleted from new matrix data
+		if (abs(index-column_to_delete) % columns == 0){
+      continue;
+    }
+		if (index > ((row_to_delete- 1)*columns) && index < (row_to_delete*columns)+1){
+      continue;
+    } 
+    //Input into new matrix if not a value from one of the deleted columns or rows
+		reduced_matrix.matrix_data[new_index] = matrix_data[index];
+		new_index++;
+	}
+	return reduced_matrix;
 }
 
 //Main program
