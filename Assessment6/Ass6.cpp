@@ -74,6 +74,10 @@ public:
   {
     return columns;
   } 
+  size_t get_value(size_t j,size_t i) const
+  {
+    return matrix_data[(i-1)+(j-1)*columns];
+  }
   size_t index(size_t m, size_t n) const 
   {//Return position in array of element (m,n)
     if(m>0 && m<=rows && n>0 && n<=columns) {
@@ -268,14 +272,19 @@ matrix matrix::operator*(const matrix& a_matrix) const
     for(size_t i{1}; i < result_matrix.rows+1; i++){
       for(size_t j{1}; j < result_matrix.columns+1; j++){
         for(size_t k{1}; k < columns+1; k++){
-          result_matrix(i,j) += index(i,k)*result_matrix.index(k,j);
+          result_matrix.set_value(i,j,get_value(i,k)*a_matrix.get_value(k,j)+result_matrix.get_value(i,j));
         } 
       }
     }
   }
 	return result_matrix;
 }
+//return a matrix with the ith row and jth column deleted
+matrix minor(size_t row_to_delete, size_t column_to_delete) const
+{
+  matrix reduced_matrix(rows-1,columns-1);
 
+}
 
 //Main program
 int main()
@@ -302,11 +311,7 @@ int main()
     std::cout << "Subtraction (m1-m2): " << std::endl << first_matrix-second_matrix << std::endl << dash() << std::endl;
     // Multiplication of 2 matrices
     std::cout << "Multiplication (m1*m2): " << std::endl << first_matrix*second_matrix << std::endl << dash() << std::endl;
-
     // Determinant
-
-
-
   }else if(option=="2"){
     //Demonstrate default constructor
     matrix a1;
@@ -361,6 +366,7 @@ int main()
     std::cout << "a2:" << std::endl << a2 << std::endl;
     std::cout << "a5:" << std::endl << a5;
     std::cout << "a5 now empty, has moved to a2 " << std::endl << dash() << std::endl;
-    } 
+    }
+
   return 0;
 }
