@@ -282,14 +282,24 @@ matrix matrix::operator*(const matrix& a_matrix) const
 //Return a matrix with the ith row and jth column deleted
 matrix matrix::minor(size_t row_to_delete, size_t column_to_delete) const
 {
+  //Checks if the row and column selected to delete is valid within the range
+  //There is 3 things to check for
+  //1. is the row/column a positive integer
+  //2. does the row/column supplied exist within the matrix to perform the minor on
+  //3. is our initial matrix a square matrix
+  //4. initial matrix has to be at least 2x2
+	if (row_to_delete > rows || row_to_delete < 1 || column_to_delete > columns || column_to_delete < 1 || rows != columns || rows < 2 || columns < 2){
+		std:: cout << "Minor cannot exist for this matrix" << std::endl;
+		exit(1);
+	}
+  //construct a smaller matrix 
   matrix reduced_matrix(rows-1,columns-1);
   size_t new_index{};
 	for (size_t index{1}; index < rows*columns+1; index++){
     //Skip columns and rows that are to be deleted from new matrix data
 		if (abs(index-column_to_delete) % columns == 0){
       continue;
-    }
-		if (index > ((row_to_delete- 1)*columns) && index < (row_to_delete*columns)+1){
+    }else if (index > ((row_to_delete- 1)*columns) && index < (row_to_delete*columns)+1){
       continue;
     } 
     //Input into new matrix if not a value from one of the deleted columns or rows
