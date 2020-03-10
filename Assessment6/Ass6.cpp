@@ -12,6 +12,20 @@ Output example:
 */
 #include<iostream>
 
+// Functions to return a break line for a better viewing experience
+std::string dash()
+{
+  std::string break_line;
+  break_line = "---------------------------------------";
+  return break_line;
+}
+std::string dash_error()
+{
+  std::string break_line;
+  break_line = "-----------------ERROR-----------------";
+  return break_line;
+}
+
 class matrix
 {
   // Friends of the class
@@ -178,16 +192,16 @@ std::istream &operator>>(std::istream &in_stream, matrix &a_matrix)
   1 2 12 2 5 7 12 2 1
   */
   //Get the number of rows and columns
-  size_t number_of_rows, number_of_columns; 
+  int number_of_rows, number_of_columns; 
   std::cout << "Enter the number of rows: ";
   std::cin >> number_of_rows;
-  if (std::cin.fail() || number_of_rows == 0) {
+  if (std::cin.fail() || number_of_rows < 1) {
     std::cout<<"Error: invalid input"<<std::endl; exit(1);
     throw("positive integer error");
   }
   std::cout << "Enter the number of columns: ";
   std::cin >> number_of_columns;
-  if (std::cin.fail() || number_of_columns == 0) {
+  if (std::cin.fail() || number_of_columns < 1) {
     std::cout<<"Error: invalid input"<<std::endl; exit(1);
     throw("positive integer error");
   }
@@ -210,13 +224,58 @@ std::istream &operator>>(std::istream &in_stream, matrix &a_matrix)
   }
   return in_stream;
 }
-
-// Function to return a break line for a better viewing experience
-std::string dash(){
-  std::string break_line;
-  break_line = "--------------------------------------";
-  return break_line;
+//Overload + for addition of matrices
+matrix matrix::operator+(const matrix& a_matrix) const
+{
+  matrix result_matrix{};
+	if (rows != a_matrix.rows || columns != a_matrix.columns) {
+		std::cout << dash_error() << dash() << std::endl << "Addition of these matrices is not possible, default displayed " << std::endl << dash_error() << dash() << std::endl;
+	}else{
+    result_matrix.set_rows(rows);
+    result_matrix.set_columns(columns);
+	  size_t array_size{rows*columns};
+	  for (size_t i{}; i < array_size; ++i){
+      result_matrix.matrix_data[i] = a_matrix.matrix_data[i] + matrix_data[i];
+    }
+  }
+	return result_matrix;
 }
+//Overload - for subtraction of matrices
+matrix matrix::operator-(const matrix& a_matrix) const
+{
+  matrix result_matrix{};
+	if (rows != a_matrix.rows || columns != a_matrix.columns) {
+		std::cout << dash_error() << dash() << std::endl << "Subtraction of these matrices is not possible, default displayed " << std::endl << dash_error() << dash() << std::endl;
+	}else{
+    result_matrix.set_rows(rows);
+    result_matrix.set_columns(columns);
+	  size_t array_size{rows*columns};
+	  for (size_t i{}; i < array_size; ++i){
+      result_matrix.matrix_data[i] = + matrix_data[i] - a_matrix.matrix_data[i] ;
+    }
+  }
+	return result_matrix;
+}
+//Overload - for multiplication of matrices
+matrix matrix::operator*(const matrix& a_matrix) const
+{
+  matrix result_matrix{};
+	if (columns != a_matrix.rows) {
+		std::cout << dash_error() << dash() << std::endl << "Multiplication of these matrices is not possible, default displayed " << std::endl << dash_error() << dash() << std::endl;
+	}else{
+    result_matrix.set_rows(rows);
+    result_matrix.set_columns(a_matrix.columns);
+    for(size_t i{1}; i < result_matrix.rows+1; i++){
+      for(size_t j{1}; j < result_matrix.columns+1; j++){
+        for(size_t k{1}; k < columns+1; k++){
+          result_matrix(i,j) += index(i,k)*result_matrix.index(k,j);
+        } 
+      }
+    }
+  }
+	return result_matrix;
+}
+
 
 //Main program
 int main()
@@ -228,7 +287,27 @@ int main()
   //Asks user to choose an option
   std::string option;
   getline(std::cin, option);
-  if(option=="2"){
+  if(option=="1"){
+    matrix first_matrix;
+    matrix second_matrix;
+    std::cin >> first_matrix;
+    std::cout << dash() << std::endl;
+    std::cin >> second_matrix;
+    std::cout << dash() << std::endl;
+    std::cout << "Your matrices: " << std::endl << "m1: " << std::endl << first_matrix << std::endl;
+    std::cout << "m2: " << std::endl << second_matrix << std::endl << dash() << std::endl;
+    // Addition of 2 matrices
+    std::cout << "Addition (m1+m2): " << std::endl << first_matrix+second_matrix << std::endl << dash() << std::endl;
+    // Subtraction of 2 matrices
+    std::cout << "Subtraction (m1-m2): " << std::endl << first_matrix-second_matrix << std::endl << dash() << std::endl;
+    // Multiplication of 2 matrices
+    std::cout << "Multiplication (m1*m2): " << std::endl << first_matrix*second_matrix << std::endl << dash() << std::endl;
+
+    // Determinant
+
+
+
+  }else if(option=="2"){
     //Demonstrate default constructor
     matrix a1;
     std::cout << "Default constructor (a1): " << std::endl << a1 << std::endl << dash() << std::endl;
@@ -282,16 +361,6 @@ int main()
     std::cout << "a2:" << std::endl << a2 << std::endl;
     std::cout << "a5:" << std::endl << a5;
     std::cout << "a5 now empty, has moved to a2 " << std::endl << dash() << std::endl;
-  }
-  // Addition of 2 matrices
-
-  // Subtraction of 2 matrices
-
-  // Multiplication of 2 matrices
-
-
-  // Determinant
-
-  
+    } 
   return 0;
 }
