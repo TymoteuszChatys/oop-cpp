@@ -11,6 +11,7 @@ Output example:
 |12 2 1|
 */
 #include<iostream>
+#include<cmath>
 
 // Functions to return a break line for a better viewing experience
 std::string dash()
@@ -51,7 +52,7 @@ public:
   matrix operator*(const matrix &a_matrix) const;
   //Calculation of the determinant
   matrix minor(size_t n, size_t m) const;
-  double determinant() const;
+  float determinant() const;
 
   //Access functions
   void set_value(const size_t &i, const size_t &j, const double &value)
@@ -279,9 +280,11 @@ matrix matrix::operator*(const matrix& a_matrix) const
   }
 	return result_matrix;
 }
+
 //Return a matrix with the ith row and jth column deleted
 matrix matrix::minor(size_t row_to_delete, size_t column_to_delete) const
 {
+  matrix reduced_matrix;
   //Checks if the row and column selected to delete is valid within the range
   //There is 3 things to check for
   //1. is the row/column a positive integer
@@ -289,24 +292,51 @@ matrix matrix::minor(size_t row_to_delete, size_t column_to_delete) const
   //3. is our initial matrix a square matrix
   //4. initial matrix has to be at least 2x2
 	if (row_to_delete > rows || row_to_delete < 1 || column_to_delete > columns || column_to_delete < 1 || rows != columns || rows < 2 || columns < 2){
-		std:: cout << "Minor cannot exist for this matrix" << std::endl;
-		exit(1);
+		std::cout << dash_error() << std::endl << "Minor of this matrix is not possible, default displayed " << std::endl << dash_error() << std::endl;
+	}else{
+    //set the rows and columns so that new matrix is a smaller matrix 
+    reduced_matrix.set_rows(rows-1);
+    reduced_matrix.set_columns(columns-1);
+    size_t new_index{};
+    if (rows == 1) return *this;
+    for (size_t index{1}; index < rows*columns+1; index++){
+      //Skip columns and rows that are to be deleted from new matrix data
+      if (abs(index-column_to_delete) % columns == 0){
+        continue;
+      }else if (index > ((row_to_delete- 1)*columns) && index < (row_to_delete*columns)+1){
+        continue;
+      } 
+      //Input into new matrix if not a value from one of the deleted columns or rows
+      reduced_matrix.matrix_data[new_index] = matrix_data[index-1];
+      new_index++;
+    }
+  }
+  return reduced_matrix;
+}
+
+float matrix::determinant() const
+{
+  float det{};
+	//check if square matrix
+	if (rows != columns){
+		std::cout << dash_error() << dash() << std::endl << "Determinant cannot be calculated for this matrix: " << std::endl << dash_error() << dash() << std::endl;
+	}else{
+    if(columns == 1){
+      det = get_value(1,1);
+    /*}else if(columns == 2){
+      det = (get_value(1,1)*get_value(2,2))-(get_value(1,2)*get_value(2,1));
+      std::cout << get_value(1,1)*get_value(2,2) << " " << get_value(1,2)*get_value(2,1) << std::endl;
+      std::cout << det << std::endl;
+      std::cout << get_value(1,1) << " " << get_value(2,2) << " " << get_value(1,2) << " " << get_value(2,1) << std::endl;
+    */}else{
+      for(int i{1}; i <= columns; i++){
+        matrix matrix_minor;
+        matrix_minor = (*this).minor(1,i);
+        det += pow(-1,1+i)*get_value(1,i)*matrix_minor.determinant();
+      }
+    }  
 	}
-  //construct a smaller matrix 
-  matrix reduced_matrix(rows-1,columns-1);
-  size_t new_index{};
-	for (size_t index{1}; index < rows*columns+1; index++){
-    //Skip columns and rows that are to be deleted from new matrix data
-		if (abs(index-column_to_delete) % columns == 0){
-      continue;
-    }else if (index > ((row_to_delete- 1)*columns) && index < (row_to_delete*columns)+1){
-      continue;
-    } 
-    //Input into new matrix if not a value from one of the deleted columns or rows
-		reduced_matrix.matrix_data[new_index] = matrix_data[index];
-		new_index++;
-	}
-	return reduced_matrix;
+	return det;
 }
 
 //Main program
@@ -335,6 +365,8 @@ int main()
     // Multiplication of 2 matrices
     std::cout << "Multiplication (m1*m2): " << std::endl << first_matrix*second_matrix << std::endl << dash() << std::endl;
     // Determinant
+    std::cout << "Determinant (m1): " << first_matrix.determinant() << std::endl << dash() << std::endl;
+    std::cout << "Determinant (m2): " << second_matrix.determinant() << std::endl << dash() << std::endl;
   }else if(option=="2"){
     //Demonstrate default constructor
     matrix a1;
