@@ -1,6 +1,6 @@
 // PHYS 30762 Programming in C++
 // Tymoteusz Chatys
-// 9th March 2020
+// 11th March 2020
 // Assignment 6
 /*
 Input example: 
@@ -75,9 +75,9 @@ public:
   {
     return columns;
   } 
-  size_t get_value(size_t j,size_t i) const
+  size_t get_value(size_t i,size_t j) const
   {
-    return matrix_data[(i-1)+(j-1)*columns];
+    return matrix_data[(j-1)+(i-1)*columns];
   }
   size_t index(size_t m, size_t n) const 
   {//Return position in array of element (m,n)
@@ -100,13 +100,11 @@ matrix::matrix() : rows{3}, columns{3}
   matrix_data = new double[rows*columns]{};
 }
 //Parameterized constructor
-matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , columns{column_number}
+matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , columns{column_number} , matrix_data{new double[row_number*column_number]} 
 {
   if (rows == 0 || columns == 0){
     std::cout << "Error: 0 dimensional matrix";
     exit(1);
-  }else{
-    matrix_data = new double[rows*columns]{};
   }
 }
 //Copy constructor
@@ -210,23 +208,23 @@ std::istream &operator>>(std::istream &in_stream, matrix &a_matrix)
     std::cout<<"Error: invalid input"<<std::endl; exit(1);
     throw("positive integer error");
   }
-  a_matrix.set_rows(number_of_rows);
-  a_matrix.set_columns(number_of_columns);
+  matrix temporary_matrix(number_of_rows,number_of_columns);
   //Get matrix values 
   std::cout << "Enter values of the matrix (" << number_of_rows*number_of_columns << " values)" << std::endl;
   //Loop to fill the matrix from input
-  double temporary; 
   for (size_t i=1; i < number_of_rows+1; i++) {
     for (size_t j=1; j < number_of_columns+1; j++) {
-      std::cin >> temporary;             
-      a_matrix.set_value(i,j, temporary); 
-      std::cin.ignore();
+      double temporary; 
+      std::cin >> temporary;  
+      std::cin.ignore();    
+      temporary_matrix.set_value(i,j, temporary); 
       if (std::cin.fail()) {
         std::cout<<"Error: invalid input"<<std::endl; exit(1);
         throw("new element of matrix error");
       }
     }
   }
+  a_matrix = temporary_matrix;
   return in_stream;
 }
 //Overload + for addition of matrices
@@ -295,8 +293,7 @@ matrix matrix::minor(size_t row_to_delete, size_t column_to_delete) const
 		std::cout << dash_error() << std::endl << "Minor of this matrix is not possible, default displayed " << std::endl << dash_error() << std::endl;
 	}else{
     //set the rows and columns so that new matrix is a smaller matrix 
-    reduced_matrix.set_rows(rows-1);
-    reduced_matrix.set_columns(columns-1);
+    matrix temporary_reduced_matrix(rows-1,columns-1);
     size_t new_index{};
     if (rows == 1) return *this;
     for (size_t index{1}; index < rows*columns+1; index++){
@@ -307,9 +304,10 @@ matrix matrix::minor(size_t row_to_delete, size_t column_to_delete) const
         continue;
       } 
       //Input into new matrix if not a value from one of the deleted columns or rows
-      reduced_matrix.matrix_data[new_index] = matrix_data[index-1];
+      temporary_reduced_matrix.matrix_data[new_index] = matrix_data[index-1];
       new_index++;
     }
+    reduced_matrix = temporary_reduced_matrix;
   }
   return reduced_matrix;
 }
@@ -323,12 +321,7 @@ float matrix::determinant() const
 	}else{
     if(columns == 1){
       det = get_value(1,1);
-    /*}else if(columns == 2){
-      det = (get_value(1,1)*get_value(2,2))-(get_value(1,2)*get_value(2,1));
-      std::cout << get_value(1,1)*get_value(2,2) << " " << get_value(1,2)*get_value(2,1) << std::endl;
-      std::cout << det << std::endl;
-      std::cout << get_value(1,1) << " " << get_value(2,2) << " " << get_value(1,2) << " " << get_value(2,1) << std::endl;
-    */}else{
+    }else{
       for(int i{1}; i <= columns; i++){
         matrix matrix_minor;
         matrix_minor = (*this).minor(1,i);
@@ -365,8 +358,8 @@ int main()
     // Multiplication of 2 matrices
     std::cout << "Multiplication (m1*m2): " << std::endl << first_matrix*second_matrix << std::endl << dash() << std::endl;
     // Determinant
-    std::cout << "Determinant (m1): " << first_matrix.determinant() << std::endl << dash() << std::endl;
-    std::cout << "Determinant (m2): " << second_matrix.determinant() << std::endl << dash() << std::endl;
+    std::cout << "Determinant (m1): " << std::endl << first_matrix.determinant() << std::endl << dash() << std::endl;
+    std::cout << "Determinant (m2): " << std::endl << second_matrix.determinant() << std::endl << dash() << std::endl;
   }else if(option=="2"){
     //Demonstrate default constructor
     matrix a1;
