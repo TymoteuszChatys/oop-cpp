@@ -1,6 +1,6 @@
 // PHYS 30762 Programming in C++
 // Tymoteusz Chatys
-// 11th March 2020
+// 13th March 2020
 // Assignment 6
 /*
 Input example: 
@@ -12,6 +12,7 @@ Output example:
 */
 #include<iostream>
 #include<cmath>
+#include<iomanip>
 
 // Functions to return a break line for a better viewing experience
 std::string dash()
@@ -100,7 +101,7 @@ matrix::matrix() : rows{3}, columns{3}
   matrix_data = new double[rows*columns]{};
 }
 //Parameterized constructor
-matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , columns{column_number} , matrix_data{new double[row_number*column_number]} 
+matrix::matrix(size_t row_number, size_t column_number) : rows{row_number} , columns{column_number} , matrix_data{new double[row_number*column_number]{}} 
 {
   if (rows == 0 || columns == 0){
     std::cout << "Error: 0 dimensional matrix";
@@ -259,7 +260,7 @@ matrix matrix::operator-(const matrix& a_matrix) const
   }
 	return result_matrix;
 }
-//Overload - for multiplication of matrices
+//Overload * for multiplication of matrices
 matrix matrix::operator*(const matrix& a_matrix) const
 {
   matrix result_matrix{};
@@ -335,10 +336,12 @@ float matrix::determinant() const
 //Main program
 int main()
 {
+  std::cout << std::setprecision(3);
   std::cout << dash() << dash() << std::endl << "Matrix calculator" << std::endl << dash() << dash() << std::endl;
   std::cout << "Which option would you like to choose?" << std::endl;
   std::cout << "1 - matrix calculator" << std::endl;
-  std::cout << "2 - copy/move constructors/assignment demonstration using matrices" << std::endl << dash() << dash() << std::endl;
+  std::cout << "2 - copy/move constructors/assignment demonstration using matrices" << std::endl;
+  std::cout << "3 - input/output information for matrix calculator" << std::endl << dash() << dash() << std::endl;
   //Asks user to choose an option
   std::string option;
   getline(std::cin, option);
@@ -414,7 +417,25 @@ int main()
     std::cout << "a2:" << std::endl << a2 << std::endl;
     std::cout << "a5:" << std::endl << a5;
     std::cout << "a5 now empty, has moved to a2 " << std::endl << dash() << std::endl;
-    }
-
+  }else if(option == "3"){
+    std::cout << dash() << std::endl;
+    std::cout << "Instructions for input" << std::endl;
+    std::cout << dash() << std::endl;
+    std::cout << "You can enter your numbers as space seperated string for example: " << std::endl;
+    std::cout << " 1 2 12 2 5 7 12 2 1 " << std::endl;
+    std::cout << "or you can enter them by pressing enter 1 by 1 for example: " << std::endl;
+    std::cout << "1" <<std::endl << "2" <<std::endl << "12" << std::endl << "2" << std::endl << "5" << std::endl << "7" <<std::endl;
+    std::cout << "12" <<std::endl << "2" << std::endl << "1" << std::endl << dash() << std::endl;
+    std::cout << "The output format for this matrix would be : " << std::endl;
+    std::cout << "|1 2 12|" << std::endl;
+    std::cout << "|2 5 7| " << std::endl;
+    std::cout << "|12 2 1|" << std::endl;
+    std::cout << dash() << std::endl;
+    std::cout << "Thank you for using the program, restart the program to use" <<std::endl;
+    std::cout << dash() << std::endl;
+  }
+  std::cout << "Input anything to exit " << std::endl; 
+  std::cin.ignore();  
+  std::cin.get(); 
   return 0;
 }
