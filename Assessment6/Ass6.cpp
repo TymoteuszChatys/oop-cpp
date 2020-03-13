@@ -95,8 +95,7 @@ public:
 	{//Return position in array of element (m,n)
 		if (m > 0 && m <= rows && n > 0 && n <= columns) {
 			return (n - 1) + (m - 1) * columns;
-		}
-		else {
+		}else {
 			std::cout << "Error: out of range" << std::endl; exit(1);
 			//throw("Out of Bounds error");
 		}
@@ -245,8 +244,7 @@ matrix matrix::operator+(const matrix& a_matrix) const
 	matrix result_matrix{};
 	if (rows != a_matrix.rows || columns != a_matrix.columns) {
 		std::cout << dash_error() << dash() << std::endl << "Addition of these matrices is not possible, default displayed " << std::endl << dash_error() << dash() << std::endl;
-	}
-	else {
+	}else {
 		result_matrix.set_rows(rows);
 		result_matrix.set_columns(columns);
 		size_t array_size{ rows * columns };
@@ -262,8 +260,7 @@ matrix matrix::operator-(const matrix& a_matrix) const
 	matrix result_matrix{};
 	if (rows != a_matrix.rows || columns != a_matrix.columns) {
 		std::cout << dash_error() << dash() << std::endl << "Subtraction of these matrices is not possible, default displayed " << std::endl << dash_error() << dash() << std::endl;
-	}
-	else {
+	}else {
 		result_matrix.set_rows(rows);
 		result_matrix.set_columns(columns);
 		size_t array_size{ rows * columns };
@@ -279,8 +276,7 @@ matrix matrix::operator*(const matrix& a_matrix) const
 	matrix result_matrix{};
 	if (columns != a_matrix.rows) {
 		std::cout << dash_error() << dash() << std::endl << "Multiplication of these matrices is not possible, default displayed " << std::endl << dash_error() << dash() << std::endl;
-	}
-	else {
+	}else {
 		result_matrix.set_rows(rows);
 		result_matrix.set_columns(a_matrix.columns);
 		for (size_t i{ 1 }; i < result_matrix.rows + 1; i++) {
@@ -306,8 +302,7 @@ matrix matrix::minor(size_t row_to_delete, size_t column_to_delete) const
 	//4. initial matrix has to be at least 2x2
 	if (row_to_delete > rows || row_to_delete < 1 || column_to_delete > columns || column_to_delete < 1 || rows != columns || rows < 2 || columns < 2) {
 		std::cout << dash_error() << std::endl << "Minor of this matrix is not possible, default displayed " << std::endl << dash_error() << std::endl;
-	}
-	else {
+	}else {
 		//set the rows and columns so that new matrix is a smaller matrix 
 		matrix temporary_reduced_matrix(rows - 1, columns - 1);
 		size_t new_index{};
@@ -335,12 +330,10 @@ double matrix::determinant() const
 	//check if square matrix
 	if (rows != columns) {
 		std::cout << dash_error() << dash() << std::endl << "Determinant cannot be calculated for this matrix: " << std::endl << dash_error() << dash() << std::endl;
-	}
-	else {
+	}else {
 		if (columns == 1) {
 			det = get_value(1, 1);
-		}
-		else {
+		}else {
 			for (size_t i{ 1 }; i <= columns; i++) {
 				matrix matrix_minor;
 				matrix_minor = (*this).minor(1, i);
@@ -382,8 +375,7 @@ int main()
 		// Determinant
 		std::cout << "Determinant (m1): " << std::endl << first_matrix.determinant() << std::endl << dash() << std::endl;
 		std::cout << "Determinant (m2): " << std::endl << second_matrix.determinant() << std::endl << dash() << std::endl;
-	}
-	else if (option == "2") {
+	}else if (option == "2") {
 		//Demonstrate default constructor
 		matrix a1;
 		std::cout << "Default constructor (a1): " << std::endl << a1 << std::endl << dash() << std::endl;
@@ -437,8 +429,7 @@ int main()
 		std::cout << "a2:" << std::endl << a2 << std::endl;
 		std::cout << "a5:" << std::endl << a5;
 		std::cout << "a5 now empty, has moved to a2 " << std::endl << dash() << std::endl;
-	}
-	else if (option == "3") {
+	}else if (option == "3") {
 		std::cout << dash() << std::endl;
 		std::cout << "Instructions for input" << std::endl;
 		std::cout << dash() << std::endl;
