@@ -76,7 +76,7 @@ public:
   {
     return columns;
   } 
-  size_t get_value(size_t i,size_t j) const
+  double get_value(size_t i,size_t j) const
   {
     return matrix_data[(j-1)+(i-1)*columns];
   }
