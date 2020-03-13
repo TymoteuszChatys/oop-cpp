@@ -2,6 +2,7 @@
 // Tymoteusz Chatys
 // 13th March 2020
 // Assignment 6
+// Tested on visual studio code without errors
 /*
 Input example: 
 1 2 12 2 5 7 12 2 1
