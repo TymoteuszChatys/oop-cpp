@@ -422,7 +422,7 @@ int main()
 		matrix a5(std::move(a2));
 		std::cout << "a2:" << std::endl << a2;
 		std::cout << "a2 now empty, it has moved to a5 " << std::endl;
-		std::cout << "a5:" << std::endl << a4 << std::endl << dash() << std::endl;
+		std::cout << "a5:" << std::endl << a5 << std::endl << dash() << std::endl;
 		// Move assignment demonstration
 		std::cout << "moving a5 back to a2 using move assignment: " << std::endl;
 		a2 = std::move(a5);
