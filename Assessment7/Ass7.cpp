@@ -273,9 +273,10 @@ class four_vector : public vector
   friend std::ostream &operator<<(std::ostream &out_stream, const four_vector &a_four_vector); 
 
 public:
-  //Default, Parameterized, Copy, Move Constructor
+  //Default, Parameterized (x2), Copy, Move Constructor
   four_vector();
   four_vector(const double &ct, vector &a_vector);
+  four_vector(const double &ct, const double &x, const double &y, const double &z);
   four_vector(const four_vector &a_four_vector)  : vector(a_four_vector) {};
   four_vector(four_vector &&a_four_vector) : vector(std::move(a_four_vector)) {};
   //Copy and Move Assignment operators
@@ -298,6 +299,14 @@ four_vector::four_vector(const double &ct, vector &a_vector) : vector(4)
   for(size_t i{1}; i < 4; i++){
         vector_data[i] = a_vector[i-1];
   }
+}
+//Parameterized Constructor with 4 doubles.
+four_vector::four_vector(const double &ct, const double &x, const double &y,const double &z): vector(4) 
+{
+  vector_data[0] = ct;
+  vector_data[1] = x;
+  vector_data[2] = y;
+  vector_data[3] = z;
 }
 //Copy Assignment
 four_vector &four_vector::operator=(four_vector &a_four_vector)
@@ -376,7 +385,7 @@ void four_vector_class_output(size_t option)
     |3 4|
     */
     vector v2{3};
-    four_vector fv2{0,v2};
+    four_vector fv2{0,v2}; //Parameterised constructor with a double and a vector is shown but this will work equally as well with the 4 double parameterised constructor.
     std::cout << "Parameterized constructor (fv2): " << std::endl << fv2 << std::endl << dash(0) << std::endl;
     fv2[0] = 4;
     fv2[1] = 6;
