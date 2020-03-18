@@ -26,6 +26,7 @@ std::string dash(int i)
 class vector
 {
     //friends of the class
+    friend std::istream& operator>>(std::istream& in_stream, vector& a_vector);
     friend std::ostream &operator<<(std::ostream &out_stream, const vector &a_vector);
 
 protected:
@@ -46,7 +47,7 @@ public:
     //overload [] operator for accessing elements of the vector
     double& operator[](const size_t index);
     //overload * for dot product of two vectors
-    vector operator*(const vector& a_vector) const;
+    double operator*(const vector& a_vector) const;
     //get and set functions
     size_t get_size() const
 	{
@@ -175,7 +176,21 @@ std::istream& operator>>(std::istream& in_stream, vector& a_vector)
 	return in_stream;
 }
 
-void vector_class_output(){
+double vector::operator*(const vector& a_vector) const
+{
+    double dot_product{0};
+    if (size != a_vector.size) {
+        std::cout << "Error: vectors must have the same size" << std::endl; exit(1);
+    }
+    for (int i{0}; i < size; i++) {
+    dot_product += vector_data[i] * a_vector.vector_data[i];
+    }
+    return dot_product;
+}
+
+
+void vector_class_output()
+{
     //Demonstrate default constructor
     vector v1;
     std::cout << "Default constructor (v1): " << std::endl << v1 << std::endl << dash(0) << std::endl;
@@ -230,10 +245,18 @@ void vector_class_output(){
     std::cout << "v5 now empty, has moved to v2 " << std::endl << dash(0) << std::endl;
     
 
-
+    vector first_vector;
+    vector second_vector;
+    std::cin >> first_vector;
+    std::cout << dash(0) << std::endl;
+    std::cin >> second_vector;
+    std::cout << dash(0) << std::endl;
+    std::cout << "Your vectors: " << std::endl << "v1: " << std::endl << first_vector << std::endl;
+    std::cout << "v2: " << std::endl << second_vector << std::endl << dash(0) << std::endl;
+    //Multiplication of 2 vectors
+    std::cout << "Dot product (v1*v2): " << std::endl << first_vector*second_vector << std::endl << dash(0) << std::endl;
     std::string option;
     getline(std::cin, option);
-    
 }
 
 int main()
