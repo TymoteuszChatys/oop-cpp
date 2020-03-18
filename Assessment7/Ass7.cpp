@@ -1,4 +1,5 @@
-//16th March 2020
+//18th March 2020
+//Tymoteusz Chatys
 //Assignment 7
 //Visual studio code
 
@@ -14,9 +15,9 @@
 std::string dash(int i)
 {
     std::string break_line;
-    if(i=0){
+    if(i==0){
 	    break_line = "---------------------------------------";
-    }else if(i=1){
+    }else if(i==1){
 	    break_line = "-----------------ERROR-----------------";
     }
 	return break_line;
@@ -51,10 +52,13 @@ public:
 	{
 		return size;
 	}
+    void set_value(const size_t& i, const double& value)
+	{//Set value i'th component of the vector
+		vector_data[i] = value;
+	}
 };
-
 //Default constructor
-vector::vector() : size{3}
+vector::vector() : size{2}
 {
 	vector_data = new double[size]{};
 }
@@ -111,7 +115,7 @@ vector& vector::operator=(vector&& a_vector) noexcept
 	return *this;
 }
 
-// overload [] operator for accessing elements of the vector
+//Overload [] operator for accessing elements of the vector
 double &vector::operator[](const size_t index) {
   if (index < 0){
     std::cout << dash(1) << std::endl << "Error: invalid input" << std::endl << "Index cannot be negative" << dash(1); exit(1);
@@ -120,8 +124,7 @@ double &vector::operator[](const size_t index) {
   }
   return vector_data[index];
 }
-
-//Outstream for vector
+//Overload << operator to output vectors
 std::ostream &operator<<(std::ostream &out_stream, const vector &a_vector){
   if(a_vector.get_size() > 0){
     out_stream << "[";
@@ -133,13 +136,147 @@ std::ostream &operator<<(std::ostream &out_stream, const vector &a_vector){
         }
     }
   }else{
-    out_stream << "vector is empty";
+    out_stream << "vector is empty" << std::endl;
   }
   return out_stream;
 }
 
+//Overload >> operator to input vectors
+std::istream& operator>>(std::istream& in_stream, vector& a_vector)
+{
+	/*
+	Input example:
+	1 2 12
+	*/
+	//Get the number of rows and columns
+	size_t size;
+	std::cout << "Enter the size of your vector: ";
+	std::cin >> size;
+	if (std::cin.fail() || size < 1) {
+		std::cout << "Error: invalid input" << std::endl; exit(1);
+		//throw("positive integer error");
+	}
+
+	vector temporary_vector(size);
+	//Get vector values 
+	std::cout << "Enter values of the vector (" << size << " values)" << std::endl;
+	//Loop to fill the vector from input
+	for (size_t i{}; i < size; i++) {
+        double temporary;
+        std::cin >> temporary;
+        std::cin.ignore();
+        temporary_vector.set_value(i,temporary);
+        if (std::cin.fail()) {
+            std::cout << "Error: invalid input" << std::endl; exit(1);
+            //throw("new element of vector error");
+        }
+	}
+	a_vector = temporary_vector;
+	return in_stream;
+}
+
+void vector_class_output(){
+    //Demonstrate default constructor
+    vector v1;
+    std::cout << "Default constructor (v1): " << std::endl << v1 << std::endl << dash(0) << std::endl;
+    //Demonstrate parameterized constructor
+    /* Make vector v2
+    |1 2|
+    |3 4|
+    */
+    vector v2{3};
+    std::cout << "Parameterized constructor (v2): " << std::endl << v2 << std::endl << dash(0) << std::endl;
+    v2.set_value(0,6); v2.set_value(1,3); v2.set_value(2,2);
+    std::cout << "Parameterized constructor (v2) after setting values (6,3,2): " << std::endl << v2 << std::endl << dash(0) << std::endl;
+    //Deep copy by assignment: define new vector v3 then copy from v2 to v3
+    std::cout << "Deep copy by assignmnent: " << std::endl;
+    vector v3{3};
+    std::cout << "Default (v3): " << std::endl << v3 << std::endl;
+    v3 = v2;
+    std::cout << "Deep copy (v2 to v3): " << std::endl << v3 << std::endl << dash(0) << std::endl;
+    //Modify contents of original vector and show assigned vector is unchanged here
+    std::cout << "Now modifying v2 and outputting v3: " << std::endl;
+    /* change v2 to
+    |2 2|
+    |2 2|
+    */
+    v2.set_value(0,2); v2.set_value(1,2); v2.set_value(2,2);
+    std::cout << "v2: " << std::endl << v2 << std::endl;
+    std::cout << "v3: " << std::endl << v3 << std::endl << dash(0) << std::endl;
+    //Deep copy using copy constructor
+    std::cout << "Deep copy using copy constructor (v2 to v4): " << std::endl;
+    vector v4{v2};
+    std::cout << "v4:" << std::endl << v4 << std::endl << dash(0) << std::endl;
+    //Modify contents of original vector and show copied vector is unchanged here
+    std::cout << "Now modifying v2 and outputting v4: " << std::endl;
+    /* change v2 to
+    |5 1|
+    |0 7|
+    */
+    v2.set_value(0,5); v2.set_value(1,1); v2.set_value(2,0);
+    std::cout << "v2:" << std::endl << v2 << std::endl;
+    std::cout << "v4:" << std::endl << v4 << std::endl << dash(0) << std::endl;
+    //Move copy construction demonstration
+    std::cout << "v5 creation using move constructor from v2: " << std::endl;
+    vector v5(std::move(v2));
+    std::cout << "v2:" << std::endl << v2;
+    std::cout << "v2 now empty, it has moved to v5 " << std::endl;
+    std::cout << "v5:" << std::endl << v5 << std::endl << dash(0) << std::endl;
+    // Move assignment demonstration
+    std::cout << "moving v5 back to v2 using move assignment: " << std::endl;
+    v2 = std::move(v5);
+    std::cout << "v2:" << std::endl << v2 << std::endl;
+    std::cout << "v5:" << std::endl << v5;
+    std::cout << "v5 now empty, has moved to v2 " << std::endl << dash(0) << std::endl;
+    
+
+
+    std::string option;
+    getline(std::cin, option);
+    
+}
 
 int main()
 {
-    std::cout << std::endl <<  "Hello world" << std::endl;
+    //Clears prvious inputs in the terminal
+    std::system("clear");
+	std::cout << std::setprecision(3);
+	std::cout << dash(0) << dash(0) << std::endl << "vector calculator" << std::endl << dash(0) << dash(0) << std::endl;
+	std::cout << "Which option would you like to choose?" << std::endl;
+	std::cout << "1 - vector class" << std::endl;
+	std::cout << "2 - 4-vector class" << std::endl;
+    std::cout << "3 - particle class" << std::endl;
+	std::cout << "4 - all" << std::endl << dash(0) << dash(0) << std::endl;
+	//Asks user to choose an option
+	std::string option;
+	getline(std::cin, option);
+    if (option == "1") {
+		vector_class_output();
+	}
+    else if (option == "2") {}
+        /*
+	}else if (option == "3") {
+		std::cout << dash() << std::endl;
+		std::cout << "Instructions for input" << std::endl;
+		std::cout << dash() << std::endl;
+		std::cout << "You can enter your numbers as space seperated string for example: " << std::endl;
+		std::cout << " 1 2 12 2 5 7 12 2 1 " << std::endl;
+		std::cout << "or you can enter them by pressing enter 1 by 1 for example: " << std::endl;
+		std::cout << "1" << std::endl << "2" << std::endl << "12" << std::endl << "2" << std::endl << "5" << std::endl << "7" << std::endl;
+		std::cout << "12" << std::endl << "2" << std::endl << "1" << std::endl << dash() << std::endl;
+		std::cout << "The output format for this vector would be : " << std::endl;
+		std::cout << "|1 2 12|" << std::endl;
+		std::cout << "|2 5 7| " << std::endl;
+		std::cout << "|12 2 1|" << std::endl;
+		std::cout << dash() << std::endl;
+		std::cout << "Thank you for using the program, restart the program to use" << std::endl;
+		std::cout << dash() << std::endl;
+	}
+    */
+    
+	std::cout << "Input anything to exit " << std::endl;
+	std::cin.ignore();
+	std::cin.get();
+	return 0;
+
 }
