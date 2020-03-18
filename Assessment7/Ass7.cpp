@@ -8,6 +8,7 @@
 #include<cmath>
 #include<iomanip>
 #include<string>
+#include<algorithm>
 
 //custom break lines for better output visualisation 
 //error(0) -> "---------------------------------------"
@@ -244,26 +245,24 @@ void vector_class_output(size_t option)
       std::cout << "v5:" << std::endl << v5;
       std::cout << "v5 now empty, has moved to v2 " << std::endl << dash(0) << std::endl;
       std::cout << "Accessing 2nd value of vector v2 located at v2[1]: " << std::endl << v2[1] << std::endl << dash(0) << std::endl;
-      std::cout << "Now, enter two vectors to receive the dot product: " << std::endl;
   }else if(option == 1){
       std::cout << "Enter two vectors to receive the dot product: " <<  std::endl;
+      vector first_vector;
+      vector second_vector;
+      std::cin >> first_vector;
+      std::cout << dash(0) << std::endl;
+      std::cin >> second_vector;
+      std::cout << dash(0) << std::endl;
+      std::cout << "Your vectors: " << std::endl << "v1: "  << first_vector << std::endl;
+      std::cout << "v2: " << second_vector << std::endl << dash(0) << std::endl;
+      //Multiplication of 2 vectors
+      std::cout << "Dot product (v1*v2): " << std::endl << first_vector*second_vector << std::endl << dash(0) << std::endl;
   }
-  vector first_vector;
-  vector second_vector;
-  std::cin >> first_vector;
-  std::cout << dash(0) << std::endl;
-  std::cin >> second_vector;
-  std::cout << dash(0) << std::endl;
-  std::cout << "Your vectors: " << std::endl << "v1: "  << first_vector << std::endl;
-  std::cout << "v2: " << second_vector << std::endl << dash(0) << std::endl;
-  //Multiplication of 2 vectors
-  std::cout << "Dot product (v1*v2): " << std::endl << first_vector*second_vector << std::endl << dash(0) << std::endl;
 }
 
 //--------------------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------------------
-
 
 //4 Vector class in the form (ct,x,y,z)
 class four_vector : public vector
@@ -288,6 +287,7 @@ public:
   double operator*(const four_vector& a_four_vector) const;
   //Lorentz boost
   four_vector lorentz_boost(vector &beta);
+  double gamma(vector &beta);
 };
 
 //Default Constructor
@@ -373,6 +373,44 @@ std::ostream &operator<<(std::ostream &out_stream, const four_vector &a_four_vec
   return out_stream;
 }
 
+four_vector four_vector::lorentz_boost(vector &beta)
+{
+  if (beta.get_size() != 3) {
+    std::cout << "Error: beta must be of size 3" << std::endl; exit(1);
+  }
+  //Calculation of lorentz factor
+  double lorentz_factor = gamma(beta);
+  double betasqared = beta*beta; 
+  bool valid{true};
+  
+  //Now we only want to extract the position vector from the 4-vector
+  vector position{3};
+  
+  for(size_t i{}; i<3; i++){
+    position[i] = vector_data[i+1];
+    if(beta[i] >= 1) {
+      valid = false;
+    }
+  }
+  if(lorentz_factor <= 1 || valid == false){
+      std::cout << "Error: this beta cannot physically exist" << std::endl; exit(1);
+  }
+  four_vector lorentz_boosted_vector{};
+  //time component calculation
+  lorentz_boosted_vector[0] = lorentz_factor*(vector_data[0]-beta*position);
+  //position component calculations
+  for(size_t i{0}; i<3; i++) {
+    lorentz_boosted_vector[i+1] = vector_data[i+1] + beta[i]*((lorentz_factor-1)*((position*beta)/betasqared)-lorentz_factor*vector_data[0]);
+  }
+  return lorentz_boosted_vector;
+}
+
+double four_vector::gamma(vector &beta)
+{
+  return 1/sqrt(1-beta*beta);
+}
+
+
 void four_vector_class_output(size_t option)
 {
   if(option==0){
@@ -439,46 +477,60 @@ void four_vector_class_output(size_t option)
     std::cout << "fv5:" << std::endl << fv5;
     std::cout << "fv5 now empty, has moved to fv2 " << std::endl << dash(0) << std::endl;
     std::cout << "Accessing 2nd value of vector fv2 located at fv2[1]: " << std::endl << fv2[1] << std::endl << dash(0) << std::endl;
-    std::cout << "Now, enter two vectors to receive the dot product: " << std::endl;
   }else if(option == 1){
     std::cout << "Enter two four-vectors to receive the dot product: " <<  std::endl;
+    four_vector first_four_vector;
+    four_vector second_four_vector;
+    std::cin >> first_four_vector;
+    std::cout << dash(0) << std::endl;
+    std::cin >> second_four_vector;
+    std::cout << dash(0) << std::endl;
+    std::cout << "Your vectors: " << std::endl << "fv1: "  << first_four_vector << std::endl;
+    std::cout << "fv2: " << second_four_vector << std::endl << dash(0) << std::endl;
+    //Dot product of 2 vectors
+    std::cout << "Dot product (fv1*fv2): " << std::endl << first_four_vector*second_four_vector << std::endl << dash(0) << std::endl;
+  }else if(option == 2){
+    std::cout << "Enter the four-vector you would like to boost followed by a three-vector beta booster (3 must be specified when asked)" << std::endl;
+    four_vector boost_four_vector;
+    std::cin >> boost_four_vector;
+    std::cout << dash(0) << std::endl;
+    vector beta{3};
+    std::cin >> beta;
+    std::cout << dash(0) << std::endl << "Your vectors " << std::endl << "fv: " << boost_four_vector << std::endl;
+    std::cout << "beta: " << beta << std::endl;
+    std::cout << boost_four_vector.lorentz_boost(beta);
   }
-  four_vector first_four_vector;
-  four_vector second_four_vector;
-  std::cin >> first_four_vector;
-  std::cout << dash(0) << std::endl;
-  std::cin >> second_four_vector;
-  std::cout << dash(0) << std::endl;
-  std::cout << "Your vectors: " << std::endl << "fv1: "  << first_four_vector << std::endl;
-  std::cout << "fv2: " << second_four_vector << std::endl << dash(0) << std::endl;
-  //Multiplication of 2 vectors
-  std::cout << "Dot product (fv1*fv2): " << std::endl << first_four_vector*second_four_vector << std::endl << dash(0) << std::endl;
 }
+
+
 
 int main()
 {
   //Clears prvious inputs in the terminal
-  std::system("clear");
-	std::cout << std::setprecision(3);
+  //std::system("clear");
+	std::cout << std::setprecision(5);
 	std::cout << dash(0) << dash(0) << std::endl << "vector calculator" << std::endl << dash(0) << dash(0) << std::endl;
 	std::cout << "Which option would you like to choose?" << std::endl;
-	std::cout << "-1   vector class" << std::endl;
-  std::cout << "---1b   vector class dot product only" << std::endl;
-	std::cout << "-2   4-vector class" << std::endl;
-  std::cout << "---2b   4-vector class dot product only" << std::endl;
+	std::cout << "-1a  vector class demonstration" << std::endl;
+  std::cout << "-1b  vector class dot product" << std::endl;
+	std::cout << "-2a  4-vector class demonstration" << std::endl;
+  std::cout << "-2b  4-vector class dot product" << std::endl;
+  std::cout << "-2c  4-vector class Lorentz transform" << std::endl;
   std::cout << "-3   particle class" << std::endl;
 	std::cout << "-4   all" << std::endl << dash(0) << dash(0) << std::endl;
 	//Asks user to choose an option
 	std::string option;
 	getline(std::cin, option);
-  if (option == "1") {
+  if (option == "1a") {
 		vector_class_output(0);
 	}else if (option == "1b"){
     vector_class_output(1);
-  }else if (option == "2") {
+  }else if (option == "2a") {
     four_vector_class_output(0);
   }else if (option == "2b"){
     four_vector_class_output(1);
+  }else if (option == "2c"){
+    four_vector_class_output(2);
   }
         /*
 	}else if (option == "3") {
