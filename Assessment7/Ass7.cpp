@@ -8,6 +8,9 @@
 #include<iomanip>
 #include<string>
 
+//custom break lines for better output visualisation 
+//error(0) -> "---------------------------------------"
+//error(1) -> "-----------------ERROR-----------------"
 std::string dash(int i)
 {
     std::string break_line;
@@ -21,7 +24,6 @@ std::string dash(int i)
 
 class vector
 {
-
 private:
     double* vector_data{nullptr};
     size_t size{};
@@ -37,8 +39,10 @@ public:
     //Copy and Move Assignment operators
 	vector& operator=(vector& a_vector);
 	vector& operator=(vector&& a_vector) noexcept;
-
-
+    //overload [] operator for accessing elements of the vector
+    double& operator[](const size_t index);
+    //overload * for dot product of two vectors
+    vector operator*(const vector& a_vector) const;
 };
 
 //Default constructor
@@ -99,8 +103,17 @@ vector& vector::operator=(vector&& a_vector) noexcept
 	return *this;
 }
 
+// overload [] operator for accessing elements of the vector
+double &vector::operator[](const size_t index) {
+  if (index < 0){
+    std::cout << dash(1) << std::endl << "Error: invalid input" << std::endl << "Index cannot be negative" << dash(1); exit(1);
+  }else if(index > size-1){
+    std::cout << dash(1) << std::endl << "Error: invalid input" << std::endl << "Index provided out of range of vector" << dash(1); exit(1);    
+  }
+  return vector_data[index];
+}
 
 int main()
 {
-    std::cout << std::endl <<  "Hello world" <<std::endl;
+    std::cout << std::endl <<  "Hello world" << std::endl;
 }
