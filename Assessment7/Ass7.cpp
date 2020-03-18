@@ -24,7 +24,10 @@ std::string dash(int i)
 
 class vector
 {
-private:
+    //friends of the class
+    friend std::ostream &operator<<(std::ostream &out_stream, const vector &a_vector);
+
+protected:
     double* vector_data{nullptr};
     size_t size{};
 
@@ -43,6 +46,11 @@ public:
     double& operator[](const size_t index);
     //overload * for dot product of two vectors
     vector operator*(const vector& a_vector) const;
+    //get and set functions
+    size_t get_size() const
+	{
+		return size;
+	}
 };
 
 //Default constructor
@@ -112,6 +120,24 @@ double &vector::operator[](const size_t index) {
   }
   return vector_data[index];
 }
+
+//Outstream for vector
+std::ostream &operator<<(std::ostream &out_stream, const vector &a_vector){
+  if(a_vector.get_size() > 0){
+    out_stream << "[";
+    for (size_t index{0}; index < a_vector.get_size(); index++) {
+        if (index == a_vector.get_size() - 1) {
+            out_stream << a_vector.vector_data[index] << "]";
+        }else{
+            out_stream << a_vector.vector_data[index] << ";";
+        }
+    }
+  }else{
+    out_stream << "vector is empty";
+  }
+  return out_stream;
+}
+
 
 int main()
 {
