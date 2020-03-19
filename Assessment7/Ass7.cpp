@@ -261,10 +261,9 @@ void vector_class_output(size_t option)
 }
 
 //--------------------------------------------------------------------------------------------------------------------------
-
+//4-Vector class in the form (ct,x,y,z)
 //--------------------------------------------------------------------------------------------------------------------------
 
-//4 Vector class in the form (ct,x,y,z)
 class four_vector : public vector
 {
   //friends of the class
@@ -503,6 +502,91 @@ void four_vector_class_output(size_t option)
 }
 
 
+//--------------------------------------------------------------------------------------------------------------------------
+//PARTICLE CLASS
+//--------------------------------------------------------------------------------------------------------------------------
+
+class particle
+{
+  friend std::ostream &operator<<(std::ostream &out_stream, particle &a_particle);
+
+private:
+  four_vector particle_four_vector;
+  vector particle_beta{3};
+  double particle_mass;
+
+public:
+  //parameterised constructor
+  particle(const four_vector &a_four_vector,const double &mass, const vector &beta): particle_four_vector{a_four_vector}, particle_mass{mass}, particle_beta{beta} {}
+  //functions for lorentz factor, momentum and total energy
+  double get_gamma();
+  vector get_momentum();
+  double get_total_energy();
+};
+//function returns gamma
+double particle::get_gamma()
+{
+  return 1/sqrt(1-particle_beta*particle_beta);
+}
+//function returns momentum
+vector particle::get_momentum() 
+{
+  vector momentum{3};
+  for (int i{0}; i < 3; i++) {
+    momentum[i] = get_gamma() * particle_mass * particle_beta[i];
+  }
+  return momentum;
+}
+//function returns total energy
+double particle::get_total_energy() 
+{
+  double momentum_squared{(get_momentum())*(get_momentum())};
+  double energy = sqrt(pow(particle_mass, 2) + momentum_squared);
+  return energy;
+}
+
+// define ostream behaviour for particle class
+std::ostream &operator<<(std::ostream &out_stream, particle &a_particle) 
+{
+  out_stream << "position = " << a_particle.particle_four_vector << std::endl
+             << "beta = " << a_particle.particle_beta << std::endl << "mass = " << a_particle.particle_mass << std::endl;
+  return out_stream;
+}
+
+void particle_class_output()
+{
+  four_vector particle_four_vector;
+  std::cout << "Position vector for the particle: " << std::endl;
+  std::cout << "Suggestion: 2 4 3 2" << std::endl;
+  std::cin >> particle_four_vector;
+
+  double mass; //mass in eV
+  std::cout << dash(0) << std::endl << "Enter mass of the particle: " << std::endl;
+  std::cout << "Suggestion: 5e8" << std::endl;
+  std::cin >> mass;
+  std::cin.ignore();
+  if (std::cin.fail()) {
+    std::cout << "Error: invalid input" << std::endl; exit(1);   
+  }
+
+  vector beta;
+  std::cout << dash(0) << std::endl << "Enter beta (must first specify it is of size 3!): " << std::endl;
+  std::cout << "Suggestion: 0.99 0.22 0.45" << std::endl;
+  std::cin >> beta;
+
+  //Parameterised constructor
+  particle particle_1{particle_four_vector, mass, beta};
+  std::cout << "Parameterised constructor" << std::endl << dash(0) << std::endl << "Particle : " << std::endl << particle_1 << dash(0) << std::endl; 
+  std::cout << "This particle has the following properties:" << std::endl;
+  //Lorentz factor (gamma)
+  std::cout << "Lorentz factor : " << particle_1.get_gamma() << std::endl;
+  //Momentum
+  std::cout << "Momentum : " << particle_1.get_momentum() << std::endl;
+  //Total energy
+  std::cout << "Total energy : " << particle_1.get_total_energy() << std::endl << dash(0) << std::endl;
+  
+}
+
 
 int main()
 {
@@ -531,32 +615,13 @@ int main()
     four_vector_class_output(1);
   }else if (option == "2c"){
     four_vector_class_output(2);
-  }
-        /*
-	}else if (option == "3") {
-		std::cout << dash() << std::endl;
-		std::cout << "Instructions for input" << std::endl;
-		std::cout << dash() << std::endl;
-		std::cout << "You can enter your numbers as space seperated string for example: " << std::endl;
-		std::cout << " 1 2 12 2 5 7 12 2 1 " << std::endl;
-		std::cout << "or you can enter them by pressing enter 1 by 1 for example: " << std::endl;
-		std::cout << "1" << std::endl << "2" << std::endl << "12" << std::endl << "2" << std::endl << "5" << std::endl << "7" << std::endl;
-		std::cout << "12" << std::endl << "2" << std::endl << "1" << std::endl << dash() << std::endl;
-		std::cout << "The output format for this vector would be : " << std::endl;
-		std::cout << "|1 2 12|" << std::endl;
-		std::cout << "|2 5 7| " << std::endl;
-		std::cout << "|12 2 1|" << std::endl;
-		std::cout << dash() << std::endl;
-		std::cout << "Thank you for using the program, restart the program to use" << std::endl;
-		std::cout << dash() << std::endl;
-	}
-    */
-  else{
+  }else if (option == "3"){
+    particle_class_output();
+  }else{
     std::cout << "No valid option detected " << std::endl;
   }
 	std::cout << "Input anything to exit " << std::endl;
 	std::cin.ignore();
 	std::cin.get();
 	return 0;
-
 }
