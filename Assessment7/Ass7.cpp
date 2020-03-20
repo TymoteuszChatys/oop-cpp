@@ -1,8 +1,7 @@
-//18th March 2020
+//20th March 2020
 //Tymoteusz Chatys
 //Assignment 7
 //Visual studio code
-
 
 #include<iostream>
 #include<cmath>
@@ -24,6 +23,7 @@ std::string dash(int i)
 	return break_line;
 }
 
+// VECTOR CLASS
 class vector
 {
   //friends of the class
@@ -118,7 +118,8 @@ vector& vector::operator=(vector&& a_vector) noexcept
 }
 
 //Overload [] operator for accessing elements of the vector
-double &vector::operator[](const size_t index) {
+double &vector::operator[](const size_t index) 
+{
   if (index < 0){
     std::cout << dash(1) << std::endl << "Error: invalid input" << std::endl << "Index cannot be negative" << dash(1); exit(1);
   }else if(index > size-1){
@@ -127,7 +128,9 @@ double &vector::operator[](const size_t index) {
   return vector_data[index];
 }
 //Overload << operator to output vectors
-std::ostream &operator<<(std::ostream &out_stream, const vector &a_vector){
+//In the format [1;2;3;4;5;6]
+std::ostream &operator<<(std::ostream &out_stream, const vector &a_vector)
+{
   if(a_vector.get_size() > 0){
     out_stream << "[";
     for (size_t index{0}; index < a_vector.get_size(); index++) {
@@ -150,7 +153,7 @@ std::istream &operator>>(std::istream &in_stream, vector &a_vector)
 	Input example:
 	1 2 12
 	*/
-	//Get the number of rows and columns
+	//Get the size of the vector
 	size_t size;
 	std::cout << "Enter the size of your vector: ";
 	std::cin >> size;
@@ -176,7 +179,7 @@ std::istream &operator>>(std::istream &in_stream, vector &a_vector)
 	a_vector = temporary_vector;
 	return in_stream;
 }
-
+//Overload * to represent the dot product between vectors
 double vector::operator*(const vector& a_vector) const
 {
     double dot_product{};
@@ -188,17 +191,17 @@ double vector::operator*(const vector& a_vector) const
     }
     return dot_product;
 }
-
+//Output function for the vector class
 void vector_class_output(size_t option)
 {
   if(option==0){
+      std::cout << "VECTOR-CLASS" << std::endl << dash(0) << std::endl;
       //Demonstrate default constructor
       vector v1;
       std::cout << "Default constructor (v1): " << std::endl << v1 << std::endl << dash(0) << std::endl;
       //Demonstrate parameterized constructor
       /* Make vector v2
-      |1 2|
-      |3 4|
+      [6;3;2]
       */
       vector v2{3};
       std::cout << "Parameterized constructor (v2): " << std::endl << v2 << std::endl << dash(0) << std::endl;
@@ -213,8 +216,7 @@ void vector_class_output(size_t option)
       //Modify contents of original vector and show assigned vector is unchanged here
       std::cout << "Now modifying v2 and outputting v3: " << std::endl;
       /* change v2 to
-      |2 2|
-      |2 2|
+      [2;2;2]
       */
       v2.set_value(0,2); v2.set_value(1,2); v2.set_value(2,2);
       std::cout << "v2: " << std::endl << v2 << std::endl;
@@ -226,8 +228,7 @@ void vector_class_output(size_t option)
       //Modify contents of original vector and show copied vector is unchanged here
       std::cout << "Now modifying v2 and outputting v4: " << std::endl;
       /* change v2 to
-      |5 1|
-      |0 7|
+      [5;1;0]
       */
       v2.set_value(0,5); v2.set_value(1,1); v2.set_value(2,0);
       std::cout << "v2:" << std::endl << v2 << std::endl;
@@ -238,7 +239,7 @@ void vector_class_output(size_t option)
       std::cout << "v2:" << std::endl << v2;
       std::cout << "v2 now empty, it has moved to v5 " << std::endl;
       std::cout << "v5:" << std::endl << v5 << std::endl << dash(0) << std::endl;
-      // Move assignment demonstration
+      //Move assignment demonstration
       std::cout << "moving v5 back to v2 using move assignment: " << std::endl;
       v2 = std::move(v5);
       std::cout << "v2:" << std::endl << v2 << std::endl;
@@ -246,6 +247,7 @@ void vector_class_output(size_t option)
       std::cout << "v5 now empty, has moved to v2 " << std::endl << dash(0) << std::endl;
       std::cout << "Accessing 2nd value of vector v2 located at v2[1]: " << std::endl << v2[1] << std::endl << dash(0) << std::endl;
   }else if(option == 1){
+      //If dot product only is chosen
       std::cout << "Enter two vectors to receive the dot product: " <<  std::endl;
       vector first_vector;
       vector second_vector;
@@ -255,7 +257,7 @@ void vector_class_output(size_t option)
       std::cout << dash(0) << std::endl;
       std::cout << "Your vectors: " << std::endl << "v1: "  << first_vector << std::endl;
       std::cout << "v2: " << second_vector << std::endl << dash(0) << std::endl;
-      //Multiplication of 2 vectors
+      //Dot product of 2 vectors
       std::cout << "Dot product (v1*v2): " << std::endl << first_vector*second_vector << std::endl << dash(0) << std::endl;
   }
 }
@@ -284,9 +286,10 @@ public:
   using vector::operator[];
   //Dot Product for 4-vectors
   double operator*(const four_vector& a_four_vector) const;
+  //gamma/Lorentz Factor
+  double gamma(vector &beta);
   //Lorentz boost
   four_vector lorentz_boost(vector &beta);
-  double gamma(vector &beta);
 };
 
 //Default Constructor
@@ -332,7 +335,6 @@ double four_vector::operator*(const four_vector& a_four_vector) const
     return vector_data[0] * a_four_vector.vector_data[0] - dot_product;
 }
 
-
 std::istream& operator>>(std::istream& in_stream, four_vector &a_four_vector)
 {
 	/*
@@ -354,7 +356,9 @@ std::istream& operator>>(std::istream& in_stream, four_vector &a_four_vector)
 	}
 	return in_stream;
 }
-
+//Output overload for four vector
+//Output example
+//[5;2;2;4]
 std::ostream &operator<<(std::ostream &out_stream, const four_vector &a_four_vector)
 {
   if(a_four_vector.get_size() > 0){
@@ -365,13 +369,13 @@ std::ostream &operator<<(std::ostream &out_stream, const four_vector &a_four_vec
       }else{
         out_stream << a_four_vector.vector_data[index] << ";";
       }
-  }
+    }
   }else{
     out_stream << "vector is empty" << std::endl;
   }
   return out_stream;
 }
-
+//Lorentz boost function to calculte boosted four_vector
 four_vector four_vector::lorentz_boost(vector &beta)
 {
   if (beta.get_size() != 3) {
@@ -382,17 +386,18 @@ four_vector four_vector::lorentz_boost(vector &beta)
   double betasqared = beta*beta; 
   bool valid{true};
   
-  //Now we only want to extract the position vector from the 4-vector
+  //Now we only want to extract the position vector from the 4-vector to enable dot product
   vector position{3};
   
+  //checking the validity of beta
   for(size_t i{}; i<3; i++){
     position[i] = vector_data[i+1];
-    if(beta[i] >= 1) {
+    if(beta[i] >= 1 || beta[i] <= -1) {
       valid = false;
     }
   }
-  if(lorentz_factor <= 1 || valid == false){
-      std::cout << "Error: this beta cannot physically exist" << std::endl; exit(1);
+  if(betasqared >= 1 || valid == false){
+    std::cout << "Error: this beta cannot physically exist" << std::endl; exit(1);
   }
   four_vector lorentz_boosted_vector{};
   //time component calculation
@@ -403,24 +408,20 @@ four_vector four_vector::lorentz_boost(vector &beta)
   }
   return lorentz_boosted_vector;
 }
-
+//Gamma/ Lorentz factor function
 double four_vector::gamma(vector &beta)
 {
   return 1/sqrt(1-beta*beta);
 }
-
-
+//Four vector class output 
 void four_vector_class_output(size_t option)
 {
   if(option==0){
+    std::cout << "FOUR-VECTOR-CLASS" << std::endl << dash(0) << std::endl;
     //Demonstrate default constructor
     four_vector fv1;
     std::cout << "Default constructor (fv1): " << std::endl << fv1 << std::endl << dash(0) << std::endl;
     //Demonstrate parameterised constructor
-    /* Make vector v2
-    |1 2|
-    |3 4|
-    */
     vector v2{3};
     four_vector fv2{0,v2}; //Parameterised constructor with a double and a vector is shown but this will work equally as well with the 4 double parameterised constructor.
     std::cout << "Parameterized constructor (fv2): " << std::endl << fv2 << std::endl << dash(0) << std::endl;
@@ -428,8 +429,11 @@ void four_vector_class_output(size_t option)
     fv2[1] = 6;
     fv2[2] = 3;
     fv2[3] = 2;
+    /* Make vector fv2
+    [4;6;3;2|
+    */
     std::cout << "Parameterized constructor (fv2) after setting values (ct,x,y,z) to (4,6,3,2): " << std::endl << fv2 << std::endl << dash(0) << std::endl;
-    //Deep copy by assignment: define new vector v3 then copy from v2 to v3
+    //Deep copy by assignment: define new vector fv3 then copy from fv2 to fv3
     std::cout << "Deep copy by assignmnent: " << std::endl;
     four_vector fv3;
     std::cout << "Default (fv3): " << std::endl << fv3 << std::endl;
@@ -438,8 +442,7 @@ void four_vector_class_output(size_t option)
     //Modify contents of original vector and show assigned vector is unchanged here
     std::cout << "Now modifying fv2 and outputting fv3: " << std::endl;
     /* change v2 to
-    |2 2|
-    |2 2|
+    [2;2;2;2]
     */
     fv2[0] = 2;
     fv2[1] = 2;
@@ -453,9 +456,8 @@ void four_vector_class_output(size_t option)
     std::cout << "fv4:" << std::endl << fv4 << std::endl << dash(0) << std::endl;
     //Modify contents of original vector and show copied vector is unchanged here
     std::cout << "Now modifying fv2 and outputting fv4: " << std::endl;
-    /* change v2 to
-    |5 1|
-    |0 7|
+    /* change fv2 to
+    [3;5;1;0]
     */
     fv2[0] = 3;
     fv2[1] = 5;
@@ -476,7 +478,7 @@ void four_vector_class_output(size_t option)
     std::cout << "fv5:" << std::endl << fv5;
     std::cout << "fv5 now empty, has moved to fv2 " << std::endl << dash(0) << std::endl;
     std::cout << "Accessing 2nd value of vector fv2 located at fv2[1]: " << std::endl << fv2[1] << std::endl << dash(0) << std::endl;
-  }else if(option == 1){
+  }else if(option == 1){ //If only the dot product of 2 vectors is chosen
     std::cout << "Enter two four-vectors to receive the dot product: " <<  std::endl;
     four_vector first_four_vector;
     four_vector second_four_vector;
@@ -548,50 +550,56 @@ double particle::get_total_energy()
 // define ostream behaviour for particle class
 std::ostream &operator<<(std::ostream &out_stream, particle &a_particle) 
 {
-  out_stream << "position = " << a_particle.particle_four_vector << std::endl
-             << "beta = " << a_particle.particle_beta << std::endl << "mass = " << a_particle.particle_mass << std::endl;
+  out_stream << "position = " << a_particle.particle_four_vector << std::endl << "beta = " << a_particle.particle_beta << std::endl << "mass = " << a_particle.particle_mass << std::endl;
   return out_stream;
 }
 
 void particle_class_output()
 {
+  std::cout << "PARTICLE-CLASS" << std::endl << dash(0) << std::endl;
+  //Ask user for the four vector of the particle
   four_vector particle_four_vector;
   std::cout << "Position vector for the particle: " << std::endl;
   std::cout << "Suggestion: 2 4 3 2" << std::endl;
   std::cin >> particle_four_vector;
-
-  double mass; //mass in eV
-  std::cout << dash(0) << std::endl << "Enter mass of the particle: " << std::endl;
+  //Ask user for the mass of the particle
+  double mass;
+  std::cout << dash(0) << std::endl << "Enter mass of the particle (eV): " << std::endl;
   std::cout << "Suggestion: 5e8" << std::endl;
   std::cin >> mass;
   std::cin.ignore();
   if (std::cin.fail()) {
     std::cout << "Error: invalid input" << std::endl; exit(1);   
   }
-
+  //Ask user for the beta of the particle
   vector beta;
-  std::cout << dash(0) << std::endl << "Enter beta (must first specify it is of size 3!): " << std::endl;
-  std::cout << "Suggestion: 0.99 0.22 0.45" << std::endl;
+  std::cout << dash(0) << std::endl << "Enter beta (in units v/c (dimensionless)) (must first specify it is of size 3!): " << std::endl;
+  std::cout << "Suggestion: 0.34 0.22 0.45" << std::endl;
   std::cin >> beta;
-
+  //Check if beta is valid 
+  bool valid = true;
+  for(size_t i{}; i<3; i++){
+    if(beta[i] >= 1 || beta[i] <= -1) {
+      valid = false;
+    }
+  }
+  if(beta*beta >= 1 || valid == false){
+    std::cout << "Error: this beta cannot physically exist" << std::endl; exit(1);
+  }
   //Parameterised constructor
   particle particle_1{particle_four_vector, mass, beta};
   std::cout << "Parameterised constructor" << std::endl << dash(0) << std::endl << "Particle : " << std::endl << particle_1 << dash(0) << std::endl; 
   std::cout << "This particle has the following properties:" << std::endl;
   //Lorentz factor (gamma)
-  std::cout << "Lorentz factor : " << particle_1.get_gamma() << std::endl;
+  std::cout << "Lorentz factor : " << particle_1.get_gamma() <<  std::endl;
   //Momentum
-  std::cout << "Momentum : " << particle_1.get_momentum() << std::endl;
+  std::cout << "Momentum : " << particle_1.get_momentum() << " MeV/c" << std::endl;
   //Total energy
-  std::cout << "Total energy : " << particle_1.get_total_energy() << std::endl << dash(0) << std::endl;
-  
+  std::cout << "Total energy : " << particle_1.get_total_energy() << std::endl << " MeV/c^2" << dash(0) << std::endl;
 }
-
 
 int main()
 {
-  //Clears prvious inputs in the terminal
-  //std::system("clear");
 	std::cout << std::setprecision(5);
 	std::cout << dash(0) << dash(0) << std::endl << "vector calculator" << std::endl << dash(0) << dash(0) << std::endl;
 	std::cout << "Which option would you like to choose?" << std::endl;
@@ -606,16 +614,23 @@ int main()
 	std::string option;
 	getline(std::cin, option);
   if (option == "1a") {
-		vector_class_output(0);
+		vector_class_output(0); //Demonstration only
 	}else if (option == "1b"){
-    vector_class_output(1);
+    vector_class_output(1); //Dot Product only
   }else if (option == "2a") {
-    four_vector_class_output(0);
+    four_vector_class_output(0); //Demonstration only 
   }else if (option == "2b"){
-    four_vector_class_output(1);
+    four_vector_class_output(1); //Dot product only
   }else if (option == "2c"){
-    four_vector_class_output(2);
+    four_vector_class_output(2); // Lorentz Transform only
   }else if (option == "3"){
+    particle_class_output(); //Particle class
+  }else if (option == "4"){ //All of the above
+    vector_class_output(0);
+    vector_class_output(1);
+    four_vector_class_output(0);
+    four_vector_class_output(1);
+    four_vector_class_output(2);
     particle_class_output();
   }else{
     std::cout << "No valid option detected " << std::endl;
