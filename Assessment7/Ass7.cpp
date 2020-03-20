@@ -169,7 +169,9 @@ std::istream &operator>>(std::istream &in_stream, vector &a_vector)
 	for (size_t i{}; i < size; i++) {
         double temporary;
         std::cin >> temporary;
-        std::cin.ignore();
+        if (i<size-1){
+          std::cin.ignore();
+        }
         temporary_vector.set_value(i,temporary);
         if (std::cin.fail()) {
             std::cout << "Error: invalid input" << std::endl; exit(1);
@@ -349,7 +351,11 @@ std::istream& operator>>(std::istream& in_stream, four_vector &a_four_vector)
 	for (size_t i{}; i < size; i++) {
         double temporary;
         std::cin >> temporary;
-        std::cin.ignore();
+        if (i<size-1){
+          std::cin.ignore();
+        }
+
+        //check for failure
         if (std::cin.fail()) {
             std::cout << "Error: invalid input" << std::endl; exit(1);   
         }
@@ -611,7 +617,7 @@ int main()
   std::cout << "-2b  4-vector class dot product" << std::endl;
   std::cout << "-2c  4-vector class Lorentz transform" << std::endl;
   std::cout << "-3   particle class" << std::endl;
-	std::cout << "-4   all" << std::endl << dash(0) << dash(0) << std::endl;
+	std::cout << "-4   all (not recommended unless user doesn't make errors)" << std::endl << dash(0) << dash(0) << std::endl;
 	//Asks user to choose an option
 	std::string option;
 	getline(std::cin, option);
