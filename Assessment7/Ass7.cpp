@@ -1,7 +1,7 @@
 //20th March 2020
 //Tymoteusz Chatys
 //Assignment 7
-//Visual studio code
+//studio code - linux - gcc but should work on Microsoft visual studio (also tested on that)
 
 #include<iostream>
 #include<cmath>
