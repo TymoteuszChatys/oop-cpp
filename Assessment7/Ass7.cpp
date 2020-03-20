@@ -177,6 +177,7 @@ std::istream &operator>>(std::istream &in_stream, vector &a_vector)
         }
 	}
 	a_vector = temporary_vector;
+  std::cin.ignore(INT64_MAX,'\n');
 	return in_stream;
 }
 //Overload * to represent the dot product between vectors
@@ -354,6 +355,7 @@ std::istream& operator>>(std::istream& in_stream, four_vector &a_four_vector)
         }
         a_four_vector.vector_data[i] = temporary;  
 	}
+  std::cin.ignore(INT64_MAX,'\n');
 	return in_stream;
 }
 //Output overload for four vector
@@ -564,8 +566,8 @@ void particle_class_output()
   std::cin >> particle_four_vector;
   //Ask user for the mass of the particle
   double mass;
-  std::cout << dash(0) << std::endl << "Enter mass of the particle (eV): " << std::endl;
-  std::cout << "Suggestion: 5e8" << std::endl;
+  std::cout << dash(0) << std::endl << "Enter mass of the particle (MeV): " << std::endl;
+  std::cout << "eg: 5e8" << std::endl;
   std::cin >> mass;
   std::cin.ignore();
   if (std::cin.fail()) {
