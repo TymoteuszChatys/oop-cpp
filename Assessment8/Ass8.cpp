@@ -5,6 +5,7 @@
 //Abstract base class with pure virtual functions and a virtual destructor.
 #include<string>
 #include<cmath>
+#include<vector>
 
 constexpr double pi() { return std::atan(1)*4; };
 
@@ -80,6 +81,7 @@ public:
 
 class circle: public ellipse
 {
+public:
     circle() : ellipse() {}
     circle(const double &radius) : ellipse(radius,radius){}
     double area(){return pi()*parameters[0]*parameters[1];}
@@ -89,7 +91,57 @@ class circle: public ellipse
 //3D Shapes
 //-----------
 
+class cuboid : public three_dimensional
+{
+public:
+    cuboid() : three_dimensional() {}
+    cuboid(const double &length, const double &width, const double &height) : three_dimensional(length,width,height){}
+    double volume(){return parameters[0]*parameters[1]*parameters[2];}
+};
+class cube: public cuboid
+{
+public:
+    cube() : cuboid() {}
+    cube(const double &length) : cuboid(length, length, length) {}
+};
+
+class ellipsoid : public three_dimensional
+{
+public:
+    ellipsoid() : three_dimensional() {}
+    ellipsoid(const double &length, const double &width, const double &height) : three_dimensional(length,width,height){}
+    double volume(){return (4/3)*pi()*parameters[0]*parameters[1]*parameters[2];}
+};
+
+class sphere: public ellipsoid
+{
+public:
+    sphere() : ellipsoid() {}
+    sphere(const double &length) : ellipsoid(length, length, length) {}
+};
+
+class prism : public three_dimensional
+{
+private:
+	double depth;
+	two_dimensional *shape_of_prism;
+public:
+	prism() : depth(0), shape_of_prism(0) {}
+	prism(double depth, two_dimensional *floor_shape) : three_dimensional(depth, floor_shape->parameters[0], floor_shape->parameters[1]) {}
+	~prism(){};
+	double volume(){return depth*(shape_of_prism->area()); }
+};
+
 int main()
 {
-
+    std::vector<shape *> shapes;
+    shapes.push_back(new rectangle{4, 6});
+    shapes.push_back(new square{2});
+    shapes.push_back(new ellipse{1, 6});
+    shapes.push_back(new circle{5});
+    shapes.push_back(new cuboid{1, 2, 3});
+    shapes.push_back(new cube{5});
+    shapes.push_back(new ellipsoid{1, 2, 3});
+    shapes.push_back(new sphere{5});
+    shapes.push_back(new prism(12, ellipse{1, 6}));
 }
