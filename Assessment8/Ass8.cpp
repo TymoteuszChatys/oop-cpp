@@ -1,6 +1,6 @@
 //Assessment8 - Class hierarchy to describe the properties of 2D and 3D shapes.
 //Tymoteusz Chatys
-//23/03/2020
+//27/03/2020
 
 //Abstract base class with pure virtual functions and a virtual destructor.
 #include<string>
@@ -10,16 +10,6 @@
 
 constexpr double pi() { return std::atan(1)*4; };
 
-//Structure of classes below
-//shape classes
-//-->2D
-//   -->Rectangle
-//      -->Square (specialisation)
-//   -->Ellipse
-//      -->Circle (specialisation)
-//-->3D
-
-
 //custom break lines for better output visualisation 
 std::string dash()
 {
@@ -28,9 +18,9 @@ std::string dash()
 	return break_line;
 }
 
-
 class shape
 {
+    friend class prism;
 protected:
     int dimensions; 
     double *parameters; 
@@ -77,6 +67,7 @@ class rectangle : public two_dimensional
 public:
     rectangle() : two_dimensional() {}
     rectangle(const double &length, const double &width) : two_dimensional(length,width){}
+    ~rectangle(){}
     double area(){return parameters[0]*parameters[1];}
     std::string name(){return "rectangle";}
 };
@@ -85,6 +76,7 @@ class square: public rectangle
 public:
     square() : rectangle() {}
     square(const double &length) : rectangle(length, length) {}
+    ~square(){}
     std::string name(){return "square";}
 };
 
@@ -93,6 +85,7 @@ class ellipse: public two_dimensional
 public:
     ellipse() : two_dimensional() {}
     ellipse(const double &semi_major, const double &semi_minor) : two_dimensional(semi_major,semi_minor){}
+    ~ellipse(){}
     double area(){return pi()*parameters[0]*parameters[1];}
     std::string name(){return "ellipse";}
 };
@@ -102,6 +95,7 @@ class circle: public ellipse
 public:
     circle() : ellipse() {}
     circle(const double &radius) : ellipse(radius,radius){}
+    ~circle(){}
     double area(){return pi()*parameters[0]*parameters[1];}
     std::string name(){return "circle";}
 };
@@ -115,6 +109,7 @@ class cuboid : public three_dimensional
 public:
     cuboid() : three_dimensional() {}
     cuboid(const double &length, const double &width, const double &height) : three_dimensional(length,width,height){}
+    ~cuboid(){}
     double volume(){return parameters[0]*parameters[1]*parameters[2];}
     double area(){return 2*parameters[0]*parameters[1]+2*parameters[1]*parameters[2]+2*parameters[0]*parameters[2];}
     std::string name(){return "cuboid";}
@@ -124,6 +119,7 @@ class cube: public cuboid
 public:
     cube() : cuboid() {}
     cube(const double &length) : cuboid(length, length, length) {}
+    ~cube(){}
     std::string name(){return "cube";}
 };
 
@@ -132,36 +128,45 @@ class ellipsoid : public three_dimensional
 public:
     ellipsoid() : three_dimensional() {}
     ellipsoid(const double &length, const double &width, const double &height) : three_dimensional(length,width,height){}
+    ~ellipsoid(){}
     double volume(){return (4/3)*pi()*parameters[0]*parameters[1]*parameters[2];}
     double area();
     std::string name(){return "ellipsoid";}
 };
 
 double ellipsoid::area()
+/* estimate based on
+https://web.archive.org/web/20110930084035/http://www.numericana.com/answer/ellipsoid.htm
+power p is approximated to 1.6075 with 4p*[(a^pb^p+a^pc^p+b^pc^p)/3]^1/p error within 1%.
+*/
 {
     return 4*pi()*pow((
-            pow(parameters[0]*parameters[1],1.6)
-             + pow(parameters[0]*parameters[2],1.6) 
-             + pow(parameters[1] * parameters[2], 1.6) )/3,1/1.6);
+            pow(parameters[0]*parameters[1],1.6075)
+             + pow(parameters[0]*parameters[2],1.6075) 
+             + pow(parameters[1] * parameters[2], 1.6075) )/3,1/1.6075);
 }
 class sphere: public ellipsoid
 {
 public:
     sphere() : ellipsoid() {}
     sphere(const double &length) : ellipsoid(length, length, length) {}
+    ~sphere(){}
     std::string name(){return "sphere";}
 };
 
-class prism : public shape
+class prism : public three_dimensional
 {
 private:
-	double depth;
-	two_dimensional *shape_of_prism;
+    double depth;
+	double face_area;
+    std::string face_name;
+	shape *shape_of_face;
 public:
-	//prism(double depth, shape *floor_shape) : three_dimensional(depth, floor_shape->parameters[0], floor_shape->parameters[1]) {}
-	~prism(){};
-	double volume(){return depth*(shape_of_prism->area()); }
-    std::string name(){return shape_of_prism->name() + " prism";}
+	prism(const double &depth, shape *shape_of_face) : three_dimensional(depth, shape_of_face->parameters[0], shape_of_face->parameters[1]) {face_area = shape_of_face->area(); face_name = shape_of_face->name();}
+	~prism(){}
+    double volume(){return parameters[0]*face_area;}
+    double area(){return 0;}
+    std::string name(){return face_name + " prism";}
 };
 
 int main()
@@ -175,7 +180,7 @@ int main()
     shapes.push_back(new cube{5});
     shapes.push_back(new ellipsoid{1, 2, 3});
     shapes.push_back(new sphere{5});
-    //shapes.push_back(new prism(12, ellipse{1, 6}));
+    shapes.push_back(new prism{2, new rectangle{2,3}});
 
     //output  iterator
     for (auto iterator = shapes.begin(); iterator!= shapes.end(); iterator++) {
