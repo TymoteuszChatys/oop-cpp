@@ -1,14 +1,16 @@
+////////////////////////////////////////////////////////////////
+//studio code (coderunner extension) - linux - gcc
+////////////////////////////////////////////////////////////////
 //Assessment8 - Class hierarchy to describe the properties of 2D and 3D shapes.
 //Tymoteusz Chatys
 //27/03/2020
-
 //Abstract base class with pure virtual functions and a virtual destructor.
 #include<string>
 #include<cmath>
 #include<vector>
 #include<iostream>
 
-constexpr double pi() { return std::atan(1)*4; };
+double pi() { return std::atan(1)*4; };
 
 //custom break lines for better output visualisation 
 std::string dash()
@@ -171,6 +173,7 @@ public:
 
 int main()
 {
+    //vector and creation of shapes
     std::vector<shape *> shapes;
     shapes.push_back(new rectangle{4, 6});
     shapes.push_back(new square{5});
@@ -194,4 +197,8 @@ int main()
         delete *iterator;
     }
 	shapes.clear();
+    
+    std::cout << "Input anything to exit " << std::endl;
+	std::cin.ignore();
+	std::cin.get();
 }
