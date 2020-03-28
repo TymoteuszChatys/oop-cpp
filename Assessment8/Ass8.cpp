@@ -201,4 +201,5 @@ int main()
     std::cout << "Input anything to exit " << std::endl;
 	std::cin.ignore();
 	std::cin.get();
+    return 0;
 }
